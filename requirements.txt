@@ -1,0 +1,10 @@
+discord.py == 1.5.1
+Pillow
+Covid19Py
+pyqrcode
+pypng
+PyDictionary
+randfacts
+pymongo
+dnspython
+asyncpg
