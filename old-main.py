@@ -45,6 +45,7 @@ regex = re.compile(
         r'(?:/?|[/?]\S+)$', re.IGNORECASE)
 
 # PREFIX STUFF
+"""
 def get_prefix(client, message):
 
     try:
@@ -58,6 +59,7 @@ def get_prefix(client, message):
         return when_mentioned_or(prefix)(client, message)
     except:
         return when_mentioned_or("-")(client, message) 
+"""
 
 def download_file(url, destination):
     req = requests.get(url)
@@ -77,7 +79,7 @@ def get_avatar(user, animate=True):
 
 
 hyena = commands.AutoShardedBot(
-    command_prefix=get_prefix,
+    command_prefix="-",
     intents=intents,
     case_sensitive=False,
     allowed_mentions = discord.AllowedMentions(everyone = False, roles = False, users = True)
@@ -361,230 +363,7 @@ Guild Membercount: {guild.member_count}
 ```
 """)
 
-
-@hyena.event
-async def on_raw_reaction_add(payload: discord.RawReactionActionEvent):
-    channel = hyena.get_channel(int(payload.channel_id))
-    try:
-        meme_reactions = ["⬆️","⬇️"]
-        channel = hyena.get_channel(payload.channel_id)
-        message = await channel.fetch_message(payload.message_id)
-
-        if str(payload.emoji) in meme_reactions:
-            for reaction in message.reactions:
-                if reaction.emoji in meme_reactions:
-                    conn = sqlite3.connect("./data/memeboard.sqlite")
-                    cursor = conn.cursor()
-
-                    cursor.execute("SELECT channelId FROM memeboard WHERE guildID = ?", (channel.guild.id, ))
-                    channel_id = cursor.fetchone()
-
-                    if channel_id != None:
-                        channel = hyena.get_channel(int(channel_id[0]))
-                        embed = discord.Embed(
-                            title = "Meme-board",
-                            description = f"{message.content}",
-                            color=random.choice(colours)
-                        )
-                        embed.set_footer(text=str(message.id))
-                        for each_message in await channel.history(limit=100).flatten():
-                            if each_message.author == channel.guild.me:
-                                if each_message.embeds:
-                                    if each_message.embeds[0].footer == str(message.id):
-                                        await each_message.edit(content=f"⬆️ {[c for c in message.reactions if '⬆️' == str(c.reaction)].count}")
-                                        return
-                        url = f"[Jump to message!](https://discordapp.com/channels/{payload.guild_id}/{payload.channel_id}/{payload.message_id})"
-                        embed.add_field(name="ORIGINAL MESSAGE", value=url)
-                        await channel.send(embed=embed)
-    except Exception as e:
-        raise e
-
-# Moderation Commands
-# @hyena.command(name="ban")
-# @commands.cooldown(1, 3, commands.BucketType.user)
-# @commands.has_permissions(ban_members=True)
-# @commands.cooldown(1, 1, commands.BucketType.member)
-# async def ban(ctx, member: discord.Member, delete_days: Optional[int] = 0, *, reason=None):
-#     if True:
-#         value = random.choice(colours) 
-#         try:
-#             author = ctx.author
-#             member_top_role = member.top_role
-#             author_top_role = author.top_role
-
-#             if author_top_role > member_top_role or ctx.guild.owner == ctx.author and not member == ctx.author:
-
-#                 if member.guild_permissions.ban_members and not ctx.guild.owner == ctx.author:
-#                     await ctx.send("You can't ban a mod bruh")
-#                     return
-
-#                 else:
-
-#                     try:
-#                         value = random.choice(colours)
-#                         embed = discord.Embed(title="You have been Banned", colour=value,
-#                                               description=f"You have been **banned** from **{ctx.guild}\
-#                                         ** server due to the following reason:\n**{(reason or 'No reason provided')}**")
-#                         await member.send(embed=embed)
-#                     except:
-#                         pass
-
-#                     await member.ban(delete_message_days=delete_days, reason=f"Banned by: {ctx.author}, Reason: {reason or 'No reason provided'}.")
-
-#                     embed = discord.Embed(title="Member banned.", description=f"Member {member} was banned from the server for the reason \n{reason}", colour=value)
-#                     embed.set_author(name=ctx.author, url=(ctx.author.avatar_url or ctx.author.default_avatar_url))
-#                     await ctx.send(embed=embed)
-
-
-#                     db = sqlite3.connect("./data/modlogs.sqlite")
-#                     cursor = db.cursor()
-#                     cursor.execute(f"SELECT channel_id FROM modlogs WHERE guild_id = {ctx.guild.id}")
-#                     result = cursor.fetchone()
-
-#                     if result is None:
-#                         pass
-#                     if result is not None:
-#                         try:
-#                             channel = await hyena.fetch_channel(result[0])
-#                         except discord.errors.NotFound:
-#                             return
-#                         embed = discord.Embed(color=random.choice(colours))
-#                         embed.set_author(name=f"BAN | {member}", icon_url=member.avatar_url)
-#                         embed.add_field(name="User", value=f"{member.name}")
-#                         embed.add_field(name="Moderator", value=f"{ctx.author.name}")
-#                         embed.add_field(name="Reason", value=f"{reason}")
-#                         embed.set_footer(text=f"Moderator: {ctx.author}", icon_url=ctx.author.avatar_url)
-#                         try:
-#                             await channel.send(embed=embed)
-#                         except:
-#                             pass
-
-#             else:
-#                 if member == ctx.author:
-#                     await ctx.send("You can't ban yourself. 🤦🏻‍")
-#                     return
-#                 else:
-#                     await ctx.send("Error, this person has a higher or equal role to you")
-#                     return
-
-#         except discord.errors.Forbidden:
-#             await ctx.send(f"Hmmm, I do not have permission to ban {member}.")
-#             return
-
-@hyena.command()
-@commands.has_permissions(ban_members=True)
-async def hackban(ctx, *, member):
-    member_to_ban = None
-    if ctx.message.mentions == []:
-        if member.isnumeric():
-            member_to_ban = discord.utils.get(ctx.guild.members, id=int(member))
-        else:
-            member_to_ban = discord.utils.get(ctx.guild.members, name=member)
-    else:
-        member_to_ban = ctx.message.mentions[0]
-    
-    if member_to_ban is not None:
-        await ban(ctx, member_to_ban, delete_days=0, reason=f"Hackbanned by {ctx.author}")
-    else:
-        if member.isnumeric():
-            member_to_ban = discord.Object(id=int(member))
-            try:
-                await ctx.guild.ban(member_to_ban, reason=f"Hackbanned by {ctx.author} ({ctx.author.id})")
-                await ctx.send(f"Done {member} Yeeted.")
-            except:
-                await ctx.send("Not a valid member (Of discord) Dumbo ||You need to provide their id||")
-        else:
-            await ctx.send("Uhhhh That thing needs to be the id nub")
-
-
-@hyena.group()
-async def memeboard(ctx):
-    if ctx.invoked_subcommand is None:
-        embed = discord.Embed(title="Memeboard commands", description="`set` Set the amount of positive reactions needed, `channel` Set the channel where the memboard is to be posted., `disable` Disable memeboard", colour=random.choice(colours))
-        embed.add_field(name="Short Description", value="""```
-❓ | What is this Feature called "Memeboard"?
-    You might be wondering what is this new feature called memeboard that devs of hyena are introducing So here is your answer :-
-        1. It is a REVOLUTIONARY feature that no discord bot currently has
-        2. How it all works?
-            i. Someone adds ⬆️ or ⬇️
-            ii. Every-time Someone adds one ⬆️ it is counted as a Positive mark and vice versa
-            iii. So.. if the message has two arrow ups and one arrow down the message currently has one memeboard point.
-            iv. You can set the amount of Memeboard points needed for it go on the ACTUAL MEMEBOARD this is much like starboard but with negative points as well.
-```
-""")
-        await ctx.send(embed=embed)
-    
-
-@memeboard.command(name="set")
-@commands.has_permissions(manage_guild=True)
-async def set_memeboard(ctx, amount="3"):
-    if not amount.isnumeric():
-        await ctx.send("Yeah no... Amount should be a number.")
-        return
-
-    conn = sqlite3.connect("data/memeboard.sqlite")
-    cursor = conn.cursor()
-	
-    sql, val = "", "" 
-    cursor.execute("SELECT * FROM memeboard WHERE guildId = ?", (ctx.guild.id, ))
-    data = cursor.fetchone()
-
-    if data is None:
-        sql = "INSERT INTO memeboard (guildId, channelId, requiredReactions) VALUES (?, 000, ?)"
-        val = (ctx.guild.id, int(amount))
-    else:
-        sql = "UPDATE memeboard SET requiredReactions = ? WHERE guildId = ?"
-        val = (int(amount), ctx.guild.id)
-    
-    cursor.execute(sql, val)
-    conn.commit()
-    cursor.close()
-    conn.close()
-    await ctx.send(f"Required amount of POSITIVE reactions has been set to {amount} \nNote If you did it for the first time please set the channel." )
-
-
-@memeboard.command(name="set-channel", aliases=["set_channel", "channel"])
-@commands.has_permissions(manage_guild=True)
-async def set_memeboard_channel(ctx, channel: discord.TextChannel):
-    conn = sqlite3.connect("data/memeboard.sqlite")
-    cursor = conn.cursor()
-
-    sql, val = "", "" 
-    cursor.execute("SELECT * FROM memeboard WHERE guildId = ?", (ctx.guild.id, ))
-    data = cursor.fetchone()
-
-    if data is None:
-        sql = "INSERT INTO memeboard (guildId, channelId, requiredReactions) VALUES (?, ?, 3)"
-        val = (ctx.guild.id, channel.id)
-    else:
-        sql = "UPDATE memeboard SET channelId = ? WHERE guildId = ?"
-        val = (channel.id, ctx.guild.id)
-    
-    cursor.execute(sql, val)
-    conn.commit()
-    cursor.close()
-    conn.close()
-    await ctx.send(f"Memeboard Channel has been set to {channel.mention} \nNote If you did it for the first time the required amount of reactions will be set to 3 on default. CHange it using the `-membaord set <amount> command`." )
-
-@memeboard.command(name="disable", aliases=['delete'])
-@commands.has_permissions(manage_guild=True)
-async def disable_memeboard(ctx):
-    conn = sqlite3.connect("data/memeboard.sqlite")
-    cursor = conn.cursor()
-    cursor.execute("SELECT * FROM memeboard WHERE guildId = ?", (ctx.guild.id, ))
-    data = cursor.fetchone()
-
-    if data is None:
-        return await ctx.send("Memeboard is already disabled dumbo")
-    else:
-        cursor.execute(f"DELETE FROM memeboard WHERE guildId = {ctx.guild.id}")
-        await ctx.send("Memeboard has been disabled!")
-
-    conn.commit()
-    cursor.close()
-    conn.close()
-
-
+"""
 @hyena.command(name="unban", aliases=['revoke_ban', 'revoke-ban'])
 @commands.cooldown(1, 3, commands.BucketType.user)
 @commands.has_permissions(ban_members=True)
@@ -722,7 +501,7 @@ async def kick(ctx, member: discord.Member, *, reason=None):
         except discord.errors.Forbidden:
             await ctx.send(f"Hmmm, I do not have permission to kick {member}.")
             return
-
+"""
 
 @hyena.command(name="lockchannel", aliases=['lock'])
 @commands.cooldown(1, 3, commands.BucketType.user)
@@ -791,7 +570,7 @@ async def unlock_channel(ctx, channel: discord.TextChannel = None):
         embed.set_footer(text=f"Moderator: {ctx.author}", icon_url=ctx.author.avatar_url)
         await log_channel.send(embed=embed)
 
-
+"""
 @hyena.command(name="purge", aliases=['clear'])
 @commands.cooldown(1, 3, commands.BucketType.user)
 @commands.has_permissions(manage_messages=True)
@@ -825,7 +604,7 @@ async def purge(ctx, amount):
     message = await ctx.send(f'purged `{p}` messages!')
     await asyncio.sleep(2)
     await message.delete()
-
+"""
 
 # noinspection PyTypeChecker
 @hyena.command(name="eval")
@@ -907,7 +686,7 @@ async def qr(ctx, qr_text):
 
     await ctx.send(file = discord.File("./assets/myqr.png"))
 
-
+"""
 @hyena.group(name="prefix")
 async def prefix_command(ctx):
     if ctx.invoked_subcommand is None:
@@ -965,7 +744,7 @@ async def set_command(ctx, prefix: str):
         db.commit()
         cursor.close()
         db.close()
-
+"""
 
 # WELCOME MSG
 @hyena.group(name="welcome")

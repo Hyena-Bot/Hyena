@@ -1,56 +1,76 @@
-import discord
+import discord, asyncio, os, sqlite3
 from discord.ext import commands
 from data.secrets import secrets
-import asyncio
+
+def get_prefix(client, message):
+
+    try:
+        db = sqlite3.connect("./data/prefixes.sqlite")
+        cursor = db.cursor()
+        cursor.execute(f"SELECT PREFIX FROM guild WHERE GuildID = {message.guild.id}")
+        result = cursor.fetchone()
+
+        prefix = result[0]
+
+        return commands.when_mentioned_or(prefix)(client, message)
+    except:
+        return commands.when_mentioned_or("t-")(client, message)
+
 
 hyena = commands.Bot(
-    command_prefix="!"
+    command_prefix=get_prefix,
+    owner_ids=[711444754080071714],
+    intents=discord.Intents.all()
 )
+
 hyena.remove_command('help')
 
 @hyena.event
 async def on_ready():
     print(f'Logged in as {hyena.user}')
 
-cogs = ['cogs.mod']
-cogs2 = ['mod']
+cogs = []
+
+for cog in os.listdir('cogs'):
+    if cog.endswith('.py'):
+        cogs.append(f"cogs.{cog[:-3]}")
 
 if __name__ == '__main__':
     for cog in cogs:
         hyena.load_extension(cog)
-        print(f"Booted up {cog[5:]}")
+        print(f"Loaded {cog[5:]}")
 
 @hyena.command(name="load")
 async def load(ctx, cog):
     if ctx.author.id == 711444754080071714 or ctx.author.id == 699543638765731892:
-        if cog not in cogs and cog not in cogs2:
-            return await ctx.send(
-                f"{cog} is not a valid cog!"
-            )
-        if cog not in cogs:
-            cog = f"cogs.{cog}"
+        if cog.endswith('.py'):
+            cog = cog[:-3]
+
         try:
-            hyena.load_extension(cog)
+            hyena.load_extension(f"cogs.{cog}")
             await ctx.message.add_reaction("<:OP_Verified:815589801586851840>")
         except discord.ext.commands.errors.ExtensionAlreadyLoaded:
-            await ctx.send("The cog `{}` is already loaded".format(cog))
+            await ctx.send(f"The cog `{cog}` is already loaded")
+        except commands.errors.ExtensionNotFound:
+            await ctx.send(f"The cog `{cog}`` is Not found...")
+
     else:
         await ctx.send("You are not the developer!")
 
 @hyena.command(name="unload")
 async def unload(ctx, cog):
     if ctx.author.id == 711444754080071714 or ctx.author.id == 699543638765731892:
-        if cog not in cogs and cog not in cogs2:
-            return await ctx.send(
-                f"{cog} is not a valid cog!"
-            )
-        if cog not in cogs:
-            cog = f"cogs.{cog}"
+        if cog.endswith('.py'):
+            cog = cog[:-3]
+
         try:
-            hyena.unload_extension(cog)
+            hyena.unload_extension(f"cogs.{cog}")
             await ctx.message.add_reaction("<:OP_Verified:815589801586851840>")
-        except discord.ext.commands.errors.ExtensionAlreadyLoaded:
-            await ctx.send("The cog `{}` is already unloaded".format(cog))
+        except commands.errors.ExtensionNotLoaded:
+            await ctx.send(f"The cog `{cog}` isn't even loaded.")
+        except commands.errors.ExtensionNotFound:
+            await ctx.send(f"The cog `{cog}`` is Not found...")
+            
     else:
         await ctx.send("You are not the developer!")
 
@@ -74,7 +94,7 @@ async def on_command_error(ctx, error):
 
     # CooooooooooooooooooooooooolDown
     elif isinstance(error, commands.errors.CommandOnCooldown):
-        message = await ctx.send(
+        await ctx.send(
             f"> <:NO:800323400449916939> You Are on Cool down, Try again in \
 {ctx.command.get_cooldown_retry_after(ctx):.2f} seconds") # works
 
@@ -84,7 +104,7 @@ async def on_command_error(ctx, error):
     elif isinstance(error, discord.ext.commands.errors.RoleNotFound):
         await ctx.send(f"> <:NO:800323400449916939> {error.argument} is not a valid role!") # works
     
-    elif isinstance(error, discord.ext.commands.errors.MemberNotFound):
+    elif isinstance(error, discord.ext.commands.errors.MemberNotFound) or isinstance(commands.errors.CheckAnyFailure):
         await ctx.send(f"> <:NO:800323400449916939> {error.argument} is not a valid member!") # works
 
     elif isinstance(error, discord.ext.commands.errors.ChannelNotFound):
@@ -108,7 +128,7 @@ async def on_command_error(ctx, error):
             f"Error Occurred In Command: `{ctx.message.content}`; \nChannel: {ctx.message.channel.mention};\
 \nAuthor: {ctx.message.author.mention}", embed=embed)
 
-        message = await ctx.send("An error occurred!", embed=embed)
+        await ctx.send("An error occurred!")
 
         await ctx.message.delete()
         raise error
