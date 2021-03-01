@@ -747,418 +747,418 @@ async def set_command(ctx, prefix: str):
 """
 
 # WELCOME MSG
-@hyena.group(name="welcome")
-@commands.cooldown(1, 3, commands.BucketType.user)
-async def welcome(ctx):
+# @hyena.group(name="welcome")
+# @commands.cooldown(1, 3, commands.BucketType.user)
+# async def welcome(ctx):
 
-    try:
-        db = sqlite3.connect("./data/prefixes.sqlite")
-        cursor = db.cursor()
-        cursor.execute(f"SELECT PREFIX FROM guild WHERE GuildID = {ctx.guild.id}")
-        result = cursor.fetchone()
+#     try:
+#         db = sqlite3.connect("./data/prefixes.sqlite")
+#         cursor = db.cursor()
+#         cursor.execute(f"SELECT PREFIX FROM guild WHERE GuildID = {ctx.guild.id}")
+#         result = cursor.fetchone()
 
-        prefix = result[0]
-    except:
-        prefix = "-"
-    value = random.choice(colours)
-    if ctx.invoked_subcommand is None:
+#         prefix = result[0]
+#     except:
+#         prefix = "-"
+#     value = random.choice(colours)
+#     if ctx.invoked_subcommand is None:
 
-        embed = discord.Embed(title="Welcome Message", color=value)
-        embed.add_field(name="Channel", value=f"Sets the channel for the welcome message. \n Command usage: \n `{prefix}welcome channel [#channel]`", inline=False)
-        embed.add_field(name="Message", value=f"Sets the welcome msg description. \n Command Usage: \n `{prefix}welcome msg [message]`", inline=False)
-        embed.add_field(name="Title", value=f"Sets the message title. \n Command Usage: \n `{prefix}welcome title [title]`", inline=False)
-        embed.add_field(name="Thumbnail", value=f"Sets the welcome thumbnail. \n Command Usage: \n `{prefix}welcome thumbnail [url]`", inline=False)
-        embed.add_field(name="Footer", value=f"Sets the welcome footer. \n Command Usage: \n `{prefix}welcome footer [message]`", inline=False)
-        embed.add_field(name="Variables", value=f"Gives the list of the variables. \n Command Usage: \n `{prefix}welcome var`", inline=False)
+#         embed = discord.Embed(title="Welcome Message", color=value)
+#         embed.add_field(name="Channel", value=f"Sets the channel for the welcome message. \n Command usage: \n `{prefix}welcome channel [#channel]`", inline=False)
+#         embed.add_field(name="Message", value=f"Sets the welcome msg description. \n Command Usage: \n `{prefix}welcome msg [message]`", inline=False)
+#         embed.add_field(name="Title", value=f"Sets the message title. \n Command Usage: \n `{prefix}welcome title [title]`", inline=False)
+#         embed.add_field(name="Thumbnail", value=f"Sets the welcome thumbnail. \n Command Usage: \n `{prefix}welcome thumbnail [url]`", inline=False)
+#         embed.add_field(name="Footer", value=f"Sets the welcome footer. \n Command Usage: \n `{prefix}welcome footer [message]`", inline=False)
+#         embed.add_field(name="Variables", value=f"Gives the list of the variables. \n Command Usage: \n `{prefix}welcome var`", inline=False)
 
-        await ctx.send(embed=embed)
-
-
-@welcome.command(name="channel")
-@commands.cooldown(1, 3, commands.BucketType.user)
-@commands.has_permissions(manage_messages=True)
-async def channel_command(ctx, channel: discord.TextChannel):
-
-    sql, val = "", ""
-
-    db = sqlite3.connect('./data/welcome.sqlite')
-    cursor = db.cursor()
-    cursor.execute(f"SELECT channel_id FROM welcome WHERE guild_id = {ctx.guild.id}")
-    result = cursor.fetchone()
-
-    if result is None:
-        sql = "INSERT INTO welcome(guild_id, channel_id) VALUES(?,?)"
-        val = (ctx.guild.id, channel.id)
-        await ctx.send(f"Channel has been set to `{channel.name}`")
-    if result is not None:
-        sql = "UPDATE welcome SET channel_id = ? where guild_id = ?"
-        val = (channel.id, ctx.guild.id)
-        await ctx.send(f"Channel has been updated to `{channel.name}`")
-    cursor.execute(sql, val)
-    db.commit()
-    cursor.close()
-    db.close()
+#         await ctx.send(embed=embed)
 
 
-@welcome.command(name="message", aliases = ['msg'])
-@commands.cooldown(1, 3, commands.BucketType.user)
-@commands.has_permissions(manage_messages=True)
-async def message_command(ctx, *, text="None"):
-    if text == "None":
-        await ctx.send("Please give the message!")
-        return
-    sql, val = "", ""
+# @welcome.command(name="channel")
+# @commands.cooldown(1, 3, commands.BucketType.user)
+# @commands.has_permissions(manage_messages=True)
+# async def channel_command(ctx, channel: discord.TextChannel):
 
-    db = sqlite3.connect('./data/welcome.sqlite')
-    cursor = db.cursor()
-    cursor.execute(f"SELECT msg FROM welcome WHERE guild_id = {ctx.guild.id}")
-    result = cursor.fetchone()
+#     sql, val = "", ""
 
-    if result is None:
-        sql = "INSERT INTO welcome(guild_id, msg) VALUES(?,?)"
-        val = (ctx.guild.id, text)
-        await ctx.send(f"Message has been set to `{text}`")
-    if result is not None:
-        sql = "UPDATE welcome SET msg = ? where guild_id = ?"
-        val = (text, ctx.guild.id)
-        await ctx.send(f"Message has been updated to `{text}`")
-    cursor.execute(sql, val)
-    db.commit()
-    cursor.close()
-    db.close()
+#     db = sqlite3.connect('./data/welcome.sqlite')
+#     cursor = db.cursor()
+#     cursor.execute(f"SELECT channel_id FROM welcome WHERE guild_id = {ctx.guild.id}")
+#     result = cursor.fetchone()
 
-@welcome.command(name="title")
-@commands.cooldown(1, 3, commands.BucketType.user)
-@commands.has_permissions(manage_messages=True)
-async def title(ctx, *, text="None"):
-    if text == "None":
-        await ctx.send("Please give the message!")
-        return
-    sql, val = "", ""
+#     if result is None:
+#         sql = "INSERT INTO welcome(guild_id, channel_id) VALUES(?,?)"
+#         val = (ctx.guild.id, channel.id)
+#         await ctx.send(f"Channel has been set to `{channel.name}`")
+#     if result is not None:
+#         sql = "UPDATE welcome SET channel_id = ? where guild_id = ?"
+#         val = (channel.id, ctx.guild.id)
+#         await ctx.send(f"Channel has been updated to `{channel.name}`")
+#     cursor.execute(sql, val)
+#     db.commit()
+#     cursor.close()
+#     db.close()
 
-    db = sqlite3.connect('./data/welcome.sqlite')
-    cursor = db.cursor()
-    cursor.execute(f"SELECT title FROM welcome WHERE guild_id = {ctx.guild.id}")
-    result = cursor.fetchone()
 
-    if result is None:
-        sql = "INSERT INTO welcome(guild_id, title) VALUES(?,?)"
-        val = (ctx.guild.id, text)
-        await ctx.send(f"Title has been set to `{text}`")
-    if result is not None:
-        sql = "UPDATE welcome SET title = ? where guild_id = ?"
-        val = (text, ctx.guild.id)
-        await ctx.send(f"Title has been updated to `{text}`")
-    cursor.execute(sql, val)
-    db.commit()
-    cursor.close()
-    db.close()
+# @welcome.command(name="message", aliases = ['msg'])
+# @commands.cooldown(1, 3, commands.BucketType.user)
+# @commands.has_permissions(manage_messages=True)
+# async def message_command(ctx, *, text="None"):
+#     if text == "None":
+#         await ctx.send("Please give the message!")
+#         return
+#     sql, val = "", ""
 
-@welcome.command(name="thumbnail", aliases=['thumb'])
-@commands.cooldown(1, 3, commands.BucketType.user)
-@commands.has_permissions(manage_messages=True)
-async def thumbnail(ctx, *, text="None"):
-    if text == "None":
-        await ctx.send("Please give the thumbnail url!")
-        return
+#     db = sqlite3.connect('./data/welcome.sqlite')
+#     cursor = db.cursor()
+#     cursor.execute(f"SELECT msg FROM welcome WHERE guild_id = {ctx.guild.id}")
+#     result = cursor.fetchone()
 
-    url_check = re.match(regex, f"{text}") is not None
+#     if result is None:
+#         sql = "INSERT INTO welcome(guild_id, msg) VALUES(?,?)"
+#         val = (ctx.guild.id, text)
+#         await ctx.send(f"Message has been set to `{text}`")
+#     if result is not None:
+#         sql = "UPDATE welcome SET msg = ? where guild_id = ?"
+#         val = (text, ctx.guild.id)
+#         await ctx.send(f"Message has been updated to `{text}`")
+#     cursor.execute(sql, val)
+#     db.commit()
+#     cursor.close()
+#     db.close()
 
-    if url_check == False:
-        await ctx.send(f"`{text}` is not a valid url :|")
-        return
+# @welcome.command(name="title")
+# @commands.cooldown(1, 3, commands.BucketType.user)
+# @commands.has_permissions(manage_messages=True)
+# async def title(ctx, *, text="None"):
+#     if text == "None":
+#         await ctx.send("Please give the message!")
+#         return
+#     sql, val = "", ""
 
-    sql, val = "", ""
+#     db = sqlite3.connect('./data/welcome.sqlite')
+#     cursor = db.cursor()
+#     cursor.execute(f"SELECT title FROM welcome WHERE guild_id = {ctx.guild.id}")
+#     result = cursor.fetchone()
 
-    db = sqlite3.connect('./data/welcome.sqlite')
-    cursor = db.cursor()
-    cursor.execute(f"SELECT thumbnail FROM welcome WHERE guild_id = {ctx.guild.id}")
-    result = cursor.fetchone()
+#     if result is None:
+#         sql = "INSERT INTO welcome(guild_id, title) VALUES(?,?)"
+#         val = (ctx.guild.id, text)
+#         await ctx.send(f"Title has been set to `{text}`")
+#     if result is not None:
+#         sql = "UPDATE welcome SET title = ? where guild_id = ?"
+#         val = (text, ctx.guild.id)
+#         await ctx.send(f"Title has been updated to `{text}`")
+#     cursor.execute(sql, val)
+#     db.commit()
+#     cursor.close()
+#     db.close()
 
-    if result is None:
-        sql = "INSERT INTO welcome(guild_id, thumbnail) VALUES(?,?)"
-        val = (ctx.guild.id, text)
-        await ctx.send(f"Thumbnail has been set to `{text}`")
-    if result is not None:
-        sql = "UPDATE welcome SET thumbnail = ? where guild_id = ?"
-        val = (text, ctx.guild.id)
-        await ctx.send(f"Thumbnail has been updated to `{text}`")
-    cursor.execute(sql, val)
-    db.commit()
-    cursor.close()
-    db.close()
+# @welcome.command(name="thumbnail", aliases=['thumb'])
+# @commands.cooldown(1, 3, commands.BucketType.user)
+# @commands.has_permissions(manage_messages=True)
+# async def thumbnail(ctx, *, text="None"):
+#     if text == "None":
+#         await ctx.send("Please give the thumbnail url!")
+#         return
 
-@welcome.command(name="footer", aliases = ['foot'])
-@commands.cooldown(1, 3, commands.BucketType.user)
-@commands.has_permissions(manage_messages=True)
-async def footer(ctx, *, text="None"):
-    if text == "None":
-        await ctx.send("Please give the message!")
-        return
-    sql, val = "", ""
+#     url_check = re.match(regex, f"{text}") is not None
 
-    db = sqlite3.connect('./data/welcome.sqlite')
-    cursor = db.cursor()
-    cursor.execute(f"SELECT footer FROM welcome WHERE guild_id = {ctx.guild.id}")
-    result = cursor.fetchone()
+#     if url_check == False:
+#         await ctx.send(f"`{text}` is not a valid url :|")
+#         return
 
-    if result is None:
-        sql = "INSERT INTO welcome(guild_id, footer) VALUES(?,?)"
-        val = (ctx.guild.id, text)
-        await ctx.send(f"Footer has been set to `{text}`")
-    if result is not None:
-        sql = "UPDATE welcome SET footer = ? where guild_id = ?"
-        val = (text, ctx.guild.id)
-        await ctx.send(f"Footer has been updated to `{text}`")
-    cursor.execute(sql, val)
-    db.commit()
-    cursor.close()
-    db.close()
+#     sql, val = "", ""
 
-@welcome.command(name='variables', aliases = ['var', 'variable'])
-@commands.cooldown(1, 3, commands.BucketType.user)
-async def var(ctx):
-    embed=discord.Embed(title="Welcome message variables", colour=random.choice(colours), description="""
-`user` = Name of the user who joined.
-`mention` = Mention the user
-`discriminator` = The tag of the user
-`tag` = Same as above ^^
-`user_proper` = Proper format of the user for e.g. Div_100#5748
-`timestamp` = The time they joined at
-`user_avatar` the avatar of the user
-`guild` = Guild Name
-`membercount` = Total members
-`total_members` = Same as above ^^
-""")
+#     db = sqlite3.connect('./data/welcome.sqlite')
+#     cursor = db.cursor()
+#     cursor.execute(f"SELECT thumbnail FROM welcome WHERE guild_id = {ctx.guild.id}")
+#     result = cursor.fetchone()
 
-    await ctx.send(embed=embed)
+#     if result is None:
+#         sql = "INSERT INTO welcome(guild_id, thumbnail) VALUES(?,?)"
+#         val = (ctx.guild.id, text)
+#         await ctx.send(f"Thumbnail has been set to `{text}`")
+#     if result is not None:
+#         sql = "UPDATE welcome SET thumbnail = ? where guild_id = ?"
+#         val = (text, ctx.guild.id)
+#         await ctx.send(f"Thumbnail has been updated to `{text}`")
+#     cursor.execute(sql, val)
+#     db.commit()
+#     cursor.close()
+#     db.close()
+
+# @welcome.command(name="footer", aliases = ['foot'])
+# @commands.cooldown(1, 3, commands.BucketType.user)
+# @commands.has_permissions(manage_messages=True)
+# async def footer(ctx, *, text="None"):
+#     if text == "None":
+#         await ctx.send("Please give the message!")
+#         return
+#     sql, val = "", ""
+
+#     db = sqlite3.connect('./data/welcome.sqlite')
+#     cursor = db.cursor()
+#     cursor.execute(f"SELECT footer FROM welcome WHERE guild_id = {ctx.guild.id}")
+#     result = cursor.fetchone()
+
+#     if result is None:
+#         sql = "INSERT INTO welcome(guild_id, footer) VALUES(?,?)"
+#         val = (ctx.guild.id, text)
+#         await ctx.send(f"Footer has been set to `{text}`")
+#     if result is not None:
+#         sql = "UPDATE welcome SET footer = ? where guild_id = ?"
+#         val = (text, ctx.guild.id)
+#         await ctx.send(f"Footer has been updated to `{text}`")
+#     cursor.execute(sql, val)
+#     db.commit()
+#     cursor.close()
+#     db.close()
+
+# @welcome.command(name='variables', aliases = ['var', 'variable'])
+# @commands.cooldown(1, 3, commands.BucketType.user)
+# async def var(ctx):
+#     embed=discord.Embed(title="Welcome message variables", colour=random.choice(colours), description="""
+# `user` = Name of the user who joined.
+# `mention` = Mention the user
+# `discriminator` = The tag of the user
+# `tag` = Same as above ^^
+# `user_proper` = Proper format of the user for e.g. Div_100#5748
+# `timestamp` = The time they joined at
+# `user_avatar` the avatar of the user
+# `guild` = Guild Name
+# `membercount` = Total members
+# `total_members` = Same as above ^^
+# """)
+
+#     await ctx.send(embed=embed)
 
 # GOODBYE MSG
-@hyena.group(name="goodbye", aliases=["leavemessage"])
-async def goodbye(ctx):
+# @hyena.group(name="goodbye", aliases=["leavemessage"])
+# async def goodbye(ctx):
 
-    try:
-        db = sqlite3.connect("./data/prefixes.sqlite")
-        cursor = db.cursor()
-        cursor.execute(f"SELECT PREFIX FROM guild WHERE GuildID = {ctx.guild.id}")
-        result = cursor.fetchone()
+#     try:
+#         db = sqlite3.connect("./data/prefixes.sqlite")
+#         cursor = db.cursor()
+#         cursor.execute(f"SELECT PREFIX FROM guild WHERE GuildID = {ctx.guild.id}")
+#         result = cursor.fetchone()
 
-        prefix = result[0]
-    except:
-        prefix = "-"
-    value = random.choice(colours)
-    if ctx.invoked_subcommand is None:
+#         prefix = result[0]
+#     except:
+#         prefix = "-"
+#     value = random.choice(colours)
+#     if ctx.invoked_subcommand is None:
 
-        embed = discord.Embed(title="goodbye Message", color=value)
-        embed.add_field(name="Channel", value=f"Sets the channel for the goodbye message. \n Command usage: \n `{prefix}goodbye channel [#channel]`", inline=False)
-        embed.add_field(name="Message", value=f"Sets the goodbye msg description. \n Command Usage: \n `{prefix}goodbye msg [message]`", inline=False)
-        embed.add_field(name="Title", value=f"Sets the message title. \n Command Usage: \n `{prefix}goodbye title [title]`", inline=False)
-        embed.add_field(name="Thumbnail", value=f"Sets the goodbye thumbnail. \n Command Usage: \n `{prefix}goodbye thumbnail [url]`", inline=False)
-        embed.add_field(name="Footer", value=f"Sets the goodbye footer. \n Command Usage: \n `{prefix}goodbye footer [message]`", inline=False)
-        embed.add_field(name="Variables", value=f"Gives the list of the variables. \n Command Usage: \n `{prefix}goodbye var`", inline=False)
+#         embed = discord.Embed(title="goodbye Message", color=value)
+#         embed.add_field(name="Channel", value=f"Sets the channel for the goodbye message. \n Command usage: \n `{prefix}goodbye channel [#channel]`", inline=False)
+#         embed.add_field(name="Message", value=f"Sets the goodbye msg description. \n Command Usage: \n `{prefix}goodbye msg [message]`", inline=False)
+#         embed.add_field(name="Title", value=f"Sets the message title. \n Command Usage: \n `{prefix}goodbye title [title]`", inline=False)
+#         embed.add_field(name="Thumbnail", value=f"Sets the goodbye thumbnail. \n Command Usage: \n `{prefix}goodbye thumbnail [url]`", inline=False)
+#         embed.add_field(name="Footer", value=f"Sets the goodbye footer. \n Command Usage: \n `{prefix}goodbye footer [message]`", inline=False)
+#         embed.add_field(name="Variables", value=f"Gives the list of the variables. \n Command Usage: \n `{prefix}goodbye var`", inline=False)
 
-        await ctx.send(embed=embed)
-
-
-@goodbye.command(name="channel")
-@commands.cooldown(1, 3, commands.BucketType.user)
-@commands.has_permissions(manage_messages=True)
-async def channel_command_2(ctx, channel: discord.TextChannel):
-
-    sql, val = "", ""
-
-    db = sqlite3.connect('./data/goodbye.sqlite')
-    cursor = db.cursor()
-    cursor.execute(f"SELECT channel_id FROM goodbye WHERE guild_id = {ctx.guild.id}")
-    result = cursor.fetchone()
-
-    if result is None:
-        sql = "INSERT INTO goodbye(guild_id, channel_id) VALUES(?,?)"
-        val = (ctx.guild.id, channel.id)
-        await ctx.send(f"Channel has been set to `{channel.name}`")
-    if result is not None:
-        sql = "UPDATE goodbye SET channel_id = ? where guild_id = ?"
-        val = (channel.id, ctx.guild.id)
-        await ctx.send(f"Channel has been updated to `{channel.name}`")
-    cursor.execute(sql, val)
-    db.commit()
-    cursor.close()
-    db.close()
+#         await ctx.send(embed=embed)
 
 
-@goodbye.command(name="message")
-@commands.cooldown(1, 3, commands.BucketType.user)
-@commands.has_permissions(manage_messages=True)
-async def message_command_2(ctx, *, text="None"):
-    if text == "None":
-        await ctx.send("Please give the message!")
-        return
-    sql, val = "", ""
+# @goodbye.command(name="channel")
+# @commands.cooldown(1, 3, commands.BucketType.user)
+# @commands.has_permissions(manage_messages=True)
+# async def channel_command_2(ctx, channel: discord.TextChannel):
 
-    db = sqlite3.connect('./data/goodbye.sqlite')
-    cursor = db.cursor()
-    cursor.execute(f"SELECT msg FROM goodbye WHERE guild_id = {ctx.guild.id}")
-    result = cursor.fetchone()
+#     sql, val = "", ""
 
-    if result is None:
-        sql = "INSERT INTO goodbye(guild_id, msg) VALUES(?,?)"
-        val = (ctx.guild.id, text)
-        await ctx.send(f"Message has been set to `{text}`")
-    if result is not None:
-        sql = "UPDATE goodbye SET msg = ? where guild_id = ?"
-        val = (text, ctx.guild.id)
-        await ctx.send(f"Message has been updated to `{text}`")
-    cursor.execute(sql, val)
-    db.commit()
-    cursor.close()
-    db.close()
+#     db = sqlite3.connect('./data/goodbye.sqlite')
+#     cursor = db.cursor()
+#     cursor.execute(f"SELECT channel_id FROM goodbye WHERE guild_id = {ctx.guild.id}")
+#     result = cursor.fetchone()
 
-@goodbye.command(name="title")
-@commands.cooldown(1, 3, commands.BucketType.user)
-@commands.has_permissions(manage_messages=True)
-async def title_command_2(ctx, *, text="None"):
-    if text == "None":
-        await ctx.send("Please give the message!")
-        return
-    sql, val = "", ""
-
-    db = sqlite3.connect('./data/goodbye.sqlite')
-    cursor = db.cursor()
-    cursor.execute(f"SELECT title FROM goodbye WHERE guild_id = {ctx.guild.id}")
-    result = cursor.fetchone()
-
-    if result is None:
-        sql = "INSERT INTO goodbye(guild_id, title) VALUES(?,?)"
-        val = (ctx.guild.id, text)
-        await ctx.send(f"Title has been set to `{text}`")
-    if result is not None:
-        sql = "UPDATE goodbye SET title = ? where guild_id = ?"
-        val = (text, ctx.guild.id)
-        await ctx.send(f"Title has been updated to `{text}`")
-    cursor.execute(sql, val)
-    db.commit()
-    cursor.close()
-    db.close()
-
-@goodbye.command(name="thumbnail", aliases=['thumb'])
-@commands.cooldown(1, 3, commands.BucketType.user)
-@commands.has_permissions(manage_messages=True)
-async def thumbnail_command_2(ctx, *, text="None"):
-    if text == "None":
-        await ctx.send("Please give the thumbnail url!")
-        return
-
-    url_check = re.match(regex, f"{text}") is not None
-
-    if url_check == False:
-        await ctx.send(f"`{text}` is not a valid url :|")
-        return
-
-    sql, val = "", ""
-
-    db = sqlite3.connect('./data/goodbye.sqlite')
-    cursor = db.cursor()
-    cursor.execute(f"SELECT thumbnail FROM goodbye WHERE guild_id = {ctx.guild.id}")
-    result = cursor.fetchone()
-
-    if result is None:
-        sql = "INSERT INTO goodbye(guild_id, thumbnail) VALUES(?,?)"
-        val = (ctx.guild.id, text)
-        await ctx.send(f"Thumbnail has been set to `{text}`")
-    if result is not None:
-        sql = "UPDATE goodbye SET thumbnail = ? where guild_id = ?"
-        val = (text, ctx.guild.id)
-        await ctx.send(f"Thumbnail has been updated to `{text}`")
-    cursor.execute(sql, val)
-    db.commit()
-    cursor.close()
-    db.close()
-
-@goodbye.command(name="footer", aliases = ['foot'])
-@commands.cooldown(1, 3, commands.BucketType.user)
-@commands.has_permissions(manage_messages=True)
-async def footer_command_2(ctx, *, text="None"):
-    if text == "None":
-        await ctx.send("Please give the message!")
-        return
-    sql, val = "", ""
-
-    db = sqlite3.connect('./data/goodbye.sqlite')
-    cursor = db.cursor()
-    cursor.execute(f"SELECT footer FROM goodbye WHERE guild_id = {ctx.guild.id}")
-    result = cursor.fetchone()
-
-    if result is None:
-        sql = "INSERT INTO goodbye(guild_id, footer) VALUES(?,?)"
-        val = (ctx.guild.id, text)
-        await ctx.send(f"Footer has been set to `{text}`")
-    if result is not None:
-        sql = "UPDATE goodbye SET footer = ? where guild_id = ?"
-        val = (text, ctx.guild.id)
-        await ctx.send(f"Footer has been updated to `{text}`")
-    cursor.execute(sql, val)
-    db.commit()
-    cursor.close()
-    db.close()
-
-@goodbye.command(name='variables', aliases = ['var', 'variable'])
-@commands.cooldown(1, 3, commands.BucketType.user)
-async def var_command_2(ctx):
-    embed=discord.Embed(title="Goodbye message variables", colour=random.choice(colours), description="""
-`user` = Name of the user who joined.
-`mention` = Mention the user
-`discriminator` = The tag of the user
-`tag` = Same as above ^^
-`user_proper` = Proper format of the user for e.g. Div_100#5748
-`timestamp` = The time they joined at
-`user_avatar` the avatar of the user
-`guild` = Guild Name
-`membercount` = Total members
-`total_members` = Same as above ^^
-""")
-
-    await ctx.send(embed=embed)
-
-@hyena.command(name="get_emoji_id", aliases = ['emoji', 'emoji-id', 'emoji_id'])
-@commands.cooldown(1, 3, commands.BucketType.user)
-async def get_emoji_id(ctx, emoji):
-
-    try:
-
-        if ":" == emoji[0] and ":" == emoji[-1]:
-            emoji_name = emoji[1:-1]
-            for guild_emoji in ctx.guild.emojis:
-                if emoji_name == guild_emoji.name:
-                    check = guild_emoji.animated
-                    if check == True:
-                        await ctx.send(f"`<a:{guild_emoji.name}:{guild_emoji.id}>`")
-                    else:
-                        await ctx.send(f"`<a:{guild_emoji.name}:{guild_emoji.id}>`")
-                    break
-
-    except:
-        await ctx.send("Please give a valid emoji :|")
+#     if result is None:
+#         sql = "INSERT INTO goodbye(guild_id, channel_id) VALUES(?,?)"
+#         val = (ctx.guild.id, channel.id)
+#         await ctx.send(f"Channel has been set to `{channel.name}`")
+#     if result is not None:
+#         sql = "UPDATE goodbye SET channel_id = ? where guild_id = ?"
+#         val = (channel.id, ctx.guild.id)
+#         await ctx.send(f"Channel has been updated to `{channel.name}`")
+#     cursor.execute(sql, val)
+#     db.commit()
+#     cursor.close()
+#     db.close()
 
 
-@goodbye.command(name="disable")
-@commands.cooldown(1, 3, commands.BucketType.user)
-@commands.has_permissions(manage_messages=True)
-async def disable(ctx):
+# @goodbye.command(name="message")
+# @commands.cooldown(1, 3, commands.BucketType.user)
+# @commands.has_permissions(manage_messages=True)
+# async def message_command_2(ctx, *, text="None"):
+#     if text == "None":
+#         await ctx.send("Please give the message!")
+#         return
+#     sql, val = "", ""
 
-    db = sqlite3.connect('./data/goodbye.sqlite')
-    cursor = db.cursor()
-    cursor.execute(f"SELECT msg FROM goodbye WHERE guild_id = {ctx.guild.id}")
-    result = cursor.fetchone()
+#     db = sqlite3.connect('./data/goodbye.sqlite')
+#     cursor = db.cursor()
+#     cursor.execute(f"SELECT msg FROM goodbye WHERE guild_id = {ctx.guild.id}")
+#     result = cursor.fetchone()
 
-    if result is None:
-        await ctx.send("goodbye is already disable, what are you even thinking :|")
-        return
-    if result is not None:
-        cursor.execute(f"DELETE from goodbye WHERE guild_id = {ctx.guild.id}")
-        await ctx.send("goodbye has been disabled!")
-    db.commit()
-    cursor.close()
-    db.close()
+#     if result is None:
+#         sql = "INSERT INTO goodbye(guild_id, msg) VALUES(?,?)"
+#         val = (ctx.guild.id, text)
+#         await ctx.send(f"Message has been set to `{text}`")
+#     if result is not None:
+#         sql = "UPDATE goodbye SET msg = ? where guild_id = ?"
+#         val = (text, ctx.guild.id)
+#         await ctx.send(f"Message has been updated to `{text}`")
+#     cursor.execute(sql, val)
+#     db.commit()
+#     cursor.close()
+#     db.close()
+
+# @goodbye.command(name="title")
+# @commands.cooldown(1, 3, commands.BucketType.user)
+# @commands.has_permissions(manage_messages=True)
+# async def title_command_2(ctx, *, text="None"):
+#     if text == "None":
+#         await ctx.send("Please give the message!")
+#         return
+#     sql, val = "", ""
+
+#     db = sqlite3.connect('./data/goodbye.sqlite')
+#     cursor = db.cursor()
+#     cursor.execute(f"SELECT title FROM goodbye WHERE guild_id = {ctx.guild.id}")
+#     result = cursor.fetchone()
+
+#     if result is None:
+#         sql = "INSERT INTO goodbye(guild_id, title) VALUES(?,?)"
+#         val = (ctx.guild.id, text)
+#         await ctx.send(f"Title has been set to `{text}`")
+#     if result is not None:
+#         sql = "UPDATE goodbye SET title = ? where guild_id = ?"
+#         val = (text, ctx.guild.id)
+#         await ctx.send(f"Title has been updated to `{text}`")
+#     cursor.execute(sql, val)
+#     db.commit()
+#     cursor.close()
+#     db.close()
+
+# @goodbye.command(name="thumbnail", aliases=['thumb'])
+# @commands.cooldown(1, 3, commands.BucketType.user)
+# @commands.has_permissions(manage_messages=True)
+# async def thumbnail_command_2(ctx, *, text="None"):
+#     if text == "None":
+#         await ctx.send("Please give the thumbnail url!")
+#         return
+
+#     url_check = re.match(regex, f"{text}") is not None
+
+#     if url_check == False:
+#         await ctx.send(f"`{text}` is not a valid url :|")
+#         return
+
+#     sql, val = "", ""
+
+#     db = sqlite3.connect('./data/goodbye.sqlite')
+#     cursor = db.cursor()
+#     cursor.execute(f"SELECT thumbnail FROM goodbye WHERE guild_id = {ctx.guild.id}")
+#     result = cursor.fetchone()
+
+#     if result is None:
+#         sql = "INSERT INTO goodbye(guild_id, thumbnail) VALUES(?,?)"
+#         val = (ctx.guild.id, text)
+#         await ctx.send(f"Thumbnail has been set to `{text}`")
+#     if result is not None:
+#         sql = "UPDATE goodbye SET thumbnail = ? where guild_id = ?"
+#         val = (text, ctx.guild.id)
+#         await ctx.send(f"Thumbnail has been updated to `{text}`")
+#     cursor.execute(sql, val)
+#     db.commit()
+#     cursor.close()
+#     db.close()
+
+# @goodbye.command(name="footer", aliases = ['foot'])
+# @commands.cooldown(1, 3, commands.BucketType.user)
+# @commands.has_permissions(manage_messages=True)
+# async def footer_command_2(ctx, *, text="None"):
+#     if text == "None":
+#         await ctx.send("Please give the message!")
+#         return
+#     sql, val = "", ""
+
+#     db = sqlite3.connect('./data/goodbye.sqlite')
+#     cursor = db.cursor()
+#     cursor.execute(f"SELECT footer FROM goodbye WHERE guild_id = {ctx.guild.id}")
+#     result = cursor.fetchone()
+
+#     if result is None:
+#         sql = "INSERT INTO goodbye(guild_id, footer) VALUES(?,?)"
+#         val = (ctx.guild.id, text)
+#         await ctx.send(f"Footer has been set to `{text}`")
+#     if result is not None:
+#         sql = "UPDATE goodbye SET footer = ? where guild_id = ?"
+#         val = (text, ctx.guild.id)
+#         await ctx.send(f"Footer has been updated to `{text}`")
+#     cursor.execute(sql, val)
+#     db.commit()
+#     cursor.close()
+#     db.close()
+
+# @goodbye.command(name='variables', aliases = ['var', 'variable'])
+# @commands.cooldown(1, 3, commands.BucketType.user)
+# async def var_command_2(ctx):
+#     embed=discord.Embed(title="Goodbye message variables", colour=random.choice(colours), description="""
+# `user` = Name of the user who joined.
+# `mention` = Mention the user
+# `discriminator` = The tag of the user
+# `tag` = Same as above ^^
+# `user_proper` = Proper format of the user for e.g. Div_100#5748
+# `timestamp` = The time they joined at
+# `user_avatar` the avatar of the user
+# `guild` = Guild Name
+# `membercount` = Total members
+# `total_members` = Same as above ^^
+# """)
+
+#     await ctx.send(embed=embed)
+
+# @hyena.command(name="get_emoji_id", aliases = ['emoji', 'emoji-id', 'emoji_id'])
+# @commands.cooldown(1, 3, commands.BucketType.user)
+# async def get_emoji_id(ctx, emoji):
+
+#     try:
+
+#         if ":" == emoji[0] and ":" == emoji[-1]:
+#             emoji_name = emoji[1:-1]
+#             for guild_emoji in ctx.guild.emojis:
+#                 if emoji_name == guild_emoji.name:
+#                     check = guild_emoji.animated
+#                     if check == True:
+#                         await ctx.send(f"`<a:{guild_emoji.name}:{guild_emoji.id}>`")
+#                     else:
+#                         await ctx.send(f"`<a:{guild_emoji.name}:{guild_emoji.id}>`")
+#                     break
+
+#     except:
+#         await ctx.send("Please give a valid emoji :|")
+
+
+# @goodbye.command(name="disable")
+# @commands.cooldown(1, 3, commands.BucketType.user)
+# @commands.has_permissions(manage_messages=True)
+# async def disable(ctx):
+
+#     db = sqlite3.connect('./data/goodbye.sqlite')
+#     cursor = db.cursor()
+#     cursor.execute(f"SELECT msg FROM goodbye WHERE guild_id = {ctx.guild.id}")
+#     result = cursor.fetchone()
+
+#     if result is None:
+#         await ctx.send("goodbye is already disable, what are you even thinking :|")
+#         return
+#     if result is not None:
+#         cursor.execute(f"DELETE from goodbye WHERE guild_id = {ctx.guild.id}")
+#         await ctx.send("goodbye has been disabled!")
+#     db.commit()
+#     cursor.close()
+#     db.close()
 
 
 # @hyena.event

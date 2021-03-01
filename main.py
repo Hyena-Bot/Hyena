@@ -1,4 +1,4 @@
-import discord, asyncio, os, sqlite3, ast
+import discord, asyncio, sqlite3, ast
 from discord.ext import commands
 from data.secrets import secrets
 
@@ -35,11 +35,7 @@ hyena.remove_command('help')
 async def on_ready():
     print(f'Logged in as {hyena.user}')
 
-cogs = []
-
-for cog in os.listdir('cogs'):
-    if cog.endswith('.py'):
-        cogs.append(f"cogs.{cog[:-3]}")
+cogs = ['cogs.welcome-confg', 'cogs.prefix', 'cogs.moderation']
 
 if __name__ == '__main__':
     for cog in cogs:
@@ -133,8 +129,7 @@ async def on_command_error(ctx, error):
         await cookie_console.send(
             f"Error Occurred In Command: `{ctx.message.content}`; \nChannel: {ctx.message.channel.mention};\
 \nAuthor: {ctx.message.author.mention}", embed=embed)
-
-        await ctx.send("An error occurred!")
+        await ctx.send("An error occurred!", embed=embed)
 
         await ctx.message.delete()
         raise error
