@@ -1,6 +1,15 @@
-import discord, sqlite3, random, ast, regex
+import discord, sqlite3, random, ast, re
 from discord.ext import commands
 from discord.ext.commands import command, has_permissions, cooldown, group
+
+re = re.compile(
+        r'^(?:http|ftp)s?://' # http:// or https://
+        r'(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|' #domain...
+        r'localhost|' #localhost...
+        r'\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})' # ...or ip
+        r'(?::\d+)?' # optional port
+        r'(?:/?|[/?]\S+)$', re.IGNORECASE)
+
 
 class Goodbye(commands.Cog):
     def __init__(self, hyena, colours):
@@ -121,7 +130,7 @@ class Goodbye(commands.Cog):
             await ctx.send("Please give the thumbnail url!")
             return
 
-        url_check = re.match(regex, f"{text}") is not None
+        url_check = re.match(re, f"{text}") is not None
 
         if url_check == False:
             await ctx.send(f"`{text}` is not a valid url :|")

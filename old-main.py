@@ -1226,27 +1226,20 @@ async def set_command(ctx, prefix: str):
 
 
 # AUTO-MOD CONF
+"""
 @hyena.group(name="automod")
 async def auto_moderation(ctx):
 
     if ctx.invoked_subcommand is None:
 
-        try:
-            db = sqlite3.connect("home/container/data/prefixes.sqlite")
-            cursor = db.cursor()
-            cursor.execute(f"SELECT PREFIX FROM guild WHERE GuildID = {ctx.guild.id}")
-            result = cursor.fetchone()
 
-            prefix = result[0]
-        except:
-            prefix = "-"
 
         embed = discord.Embed(title="AutoMod",
                               description="`filtered-words`, `invite-link`, `caps`, `ignore`, `links`, `ignore-remove` , `caps-limit`, `whitelist`, `blacklist`, `show-blacklists`",
                               color=random.choice(colours))
-        embed.add_field(name="Command usage", value=f"{prefix}automod [auto-mod event] [enable/disable]")
-        embed.add_field(name="Exception usage", value=f"{prefix}automod ignore [channel]")
-        embed.add_field(name="Exception uage", value=f"{prefix}automod ignore-remove")
+        embed.add_field(name="Command usage", value=f"-automod [auto-mod event] [enable/disable]")
+        embed.add_field(name="Exception usage", value=f"-automod ignore [channel]")
+        embed.add_field(name="Exception uage", value=f"-automod ignore-remove")
 
         await ctx.send(embed=embed)
 
@@ -1566,7 +1559,7 @@ async def close(ctx, channel: discord.TextChannel = None, *, reason='None'):
             await ctx.author.send("Ticket closed")
         except discord.errors.Forbidden:
             pass
-
+"""
 
 #MUTE SYSTEM
 @hyena.group()
@@ -3143,96 +3136,6 @@ async def fact(ctx):
     await ctx.send(f"OwO did you know this one? `{randfacts.getFact()}`")
 
 # IGNORE AUTOMOD
-
-@auto_moderation.command(name="ignore", aliases=['ignore_channel'])
-@commands.cooldown(1, 3, commands.BucketType.user)
-@commands.has_permissions(manage_channels=True)
-async def ignore(ctx, channel: discord.TextChannel):
-    sql, val = "", ""
-
-    db = sqlite3.connect('./data/automod.sqlite')
-    cursor = db.cursor()
-    cursor.execute(f"SELECT channels FROM channel WHERE guild_id = {ctx.guild.id}")
-    result = cursor.fetchone()
-
-    if result is None:
-
-        # MAKING LIST
-        list = [channel.id]
-
-        # STORING
-        sql = "INSERT INTO channel(guild_id, channels) VALUES(?,?)"
-        val = (ctx.guild.id, str(list))
-        await ctx.send(f"{channel.mention} has been added to ignored channels!")
-    if result is not None:
-
-        # MAKING LIST
-        my_str = result[0]
-        list = my_str.strip('][').split(', ')
-        result_list = [int(i) for i in list]
-
-        # CHECKING LIST
-        if len(result_list) >= 10:
-            await ctx.send("You already have 10 ignored channels you cant add more :|")
-            return
-        elif (channel.id in result_list):
-            await ctx.send(f"{channel.mention} is already being ignored.")
-            return
-        result_list.append(channel.id)
-
-        # STORING
-        sql = "UPDATE channel SET channels = ? WHERE guild_id = ?"
-        val = (str(result_list), ctx.guild.id)
-        await ctx.send(f"{channel.mention} has been added to ignored channels!")
-
-    cursor.execute(sql, val)
-    db.commit()
-    cursor.close()
-    db.close()
-
-@auto_moderation.command(name="ignore_remove", aliases=['ignore-disable', 'ignore-remove'])
-@commands.cooldown(1, 3, commands.BucketType.user)
-@commands.has_permissions(manage_channels=True)
-async def ignore_remove(ctx, channel: discord.TextChannel):
-
-    db = sqlite3.connect('data/automod.sqlite')
-    cursor = db.cursor()
-    cursor.execute(f"SELECT channels FROM channel WHERE guild_id = {ctx.guild.id}")
-    result = cursor.fetchone()
-
-    if result is None:
-        await ctx.send(f"There are no ignored channels.")
-    if result is not None:
-        my_str = result[0]
-        list = my_str.strip('][').split(', ')
-        result_list = [int(i) for i in list]
-
-        if len(result_list) == 1:
-            if result_list[0] == channel.id:
-                cursor.execute(f"DELETE FROM channel WHERE guild_id = {ctx.guild.id}")
-                await ctx.send("Ignored channels have been removed!")
-                db.commit()
-                cursor.close()
-                db.close()
-            else:
-                await ctx.send(f"{channel.mention} is not ignored!")
-        else:
-            if (channel.id not in result_list):
-                await ctx.send(f"{channel.mention} is not ignored!")
-                return
-            for i in result_list:
-                if i == channel.id:
-                    result_list.pop(result_list.index(i))
-                
-            sql = "UPDATE channel SET channels = ? WHERE guild_id = ?"
-            val = (str(result_list), ctx.guild.id)
-            await ctx.send(f"{channel.mention} has been removed from ignored channels!")
-
-            cursor.execute(sql, val)
-            db.commit()
-            cursor.close()
-            db.close()
-
 def convert_time(time):
     pos = ["s", "m", "h"]
 
@@ -3361,149 +3264,6 @@ async def nuke(ctx, channel:discord.TextChannel=None):
     
 # blacklist words automod
 
-@auto_moderation.command(name="blacklist", aliases=['blacklists'])
-@commands.has_permissions(manage_messages=True)
-async def blacklist(ctx, *, word: str):
-    sql, val = "", ""
-
-    if len(word) >= 70:
-        return await ctx.send(
-            "Add a sensible word you dumb :|"
-        )
-
-    if "'" in word:
-        return await ctx.send(
-            "You word cannot contain `'`"
-        )
-
-    db = sqlite3.connect('./data/auto-mod-words.sqlite')
-    cursor = db.cursor()
-    cursor.execute(f"SELECT words FROM blacklists WHERE guild_id = {ctx.guild.id}")
-    result = cursor.fetchone()
-
-    if result is None:
-
-        # MAKING LIST
-        list = [word]
-
-        # STORING
-        sql = "INSERT INTO blacklists(guild_id, words) VALUES(?,?)"
-        val = (ctx.guild.id, str(list))
-        await ctx.send(f"|| {word} || has been added to blacklisted words!")
-    if result is not None:
-
-        # MAKING LIST
-        my_str = result[0]
-        list = ast.literal_eval(my_str)
-        result_list = [n.strip() for n in list]
-
-        # CHECKING LIST
-        if len(result_list) >= 100:
-            await ctx.send("You already have 100 blacklisted words you cant add more :|")
-            return
-        elif (word in result_list):
-            await ctx.send(f"|| {word} || is already ignored, How tf did you plan to add a word that is already added")
-            return
-        result_list.append(word)
-
-        # STORING
-        sql = "UPDATE blacklists SET words = ? WHERE guild_id = ?"
-        val = (str(result_list), ctx.guild.id)
-        await ctx.send(f"|| {word} || has been added to blacklisted words!")
-
-    cursor.execute(sql, val)
-    db.commit()
-    cursor.close()
-    db.close()
-
-@auto_moderation.command(name="whitelist", aliases=['whitlist', 'blacklist-remove'])
-@commands.cooldown(1, 3, commands.BucketType.user)
-@commands.has_permissions(manage_messages=True)
-async def whitelist(ctx, *, word: str):
-
-    db = sqlite3.connect('./data/auto-mod-words.sqlite')
-    cursor = db.cursor()
-    cursor.execute(f"SELECT words FROM blacklists WHERE guild_id = {ctx.guild.id}")
-    result = cursor.fetchone()
-
-    if result is None:
-        await ctx.send(f"There are no blacklisted words..")
-    if result is not None:
-        my_str = result[0]
-        list = ast.literal_eval(my_str)
-        result_list = [n.strip() for n in list]
-
-        if len(result_list) == 1:
-            if result_list[0] == word:
-                cursor.execute(f"DELETE FROM blacklists WHERE guild_id = {ctx.guild.id}")
-                await ctx.send(f"|| {word} || has been whitelisted!")
-                db.commit()
-                cursor.close()
-                db.close() # oops
-            else:
-                await ctx.send(f"|| {word} || is not blacklisted :|")
-        else:
-            if (word not in result_list):
-                await ctx.send(f"|| {word} || is not blacklisted :|")
-                return
-            for i in result_list:
-                if i == word:
-                    result_list.pop(result_list.index(i))
-                
-            sql = "UPDATE blacklists SET words = ? WHERE guild_id = ?"
-            val = (str(result_list), ctx.guild.id)
-            await ctx.send(f"|| {word} || has been whitelisted!")
-
-            cursor.execute(sql, val)
-            db.commit()
-            cursor.close()
-            db.close()
-
-
-@auto_moderation.command(name="show-blacklists", aliases=['view-blacklists'])
-@commands.has_permissions(manage_messages=True)
-async def show_blacklists(ctx):
-    
-    msg = await ctx.send("**WARNING** This file might be inappropriate for some users! are you sure you want to open it?")
-    await msg.add_reaction('✅')
-
-    def check(reaction, user):
-        return user == ctx.message.author and str(reaction.emoji) == '✅'
-
-    try:
-        await hyena.wait_for('reaction_add', timeout=int(30.0), check=check)
-
-    except asyncio.TimeoutError:
-        try:
-            await msg.clear_reaction('✅')
-        except:
-            pass
-    else:
-        db = sqlite3.connect('./data/auto-mod-words.sqlite')
-        cursor = db.cursor()
-        cursor.execute(f"SELECT words FROM blacklists WHERE guild_id = {ctx.guild.id}")
-        result = cursor.fetchone()
-
-        if result is None:
-            await ctx.send(f"There are no blacklisted words..")
-        if result is not None:
-            list = result[0]
-            list = ast.literal_eval(list)
-            list = [n.strip() for n in list]
-
-            blacklists = []
-            for i in list:
-                blacklists.append(i)
-            lst = ", ".join(blacklists)
-
-            f = open('./assets/words.txt', 'w')
-            f.write(lst)
-            f.close()
-
-            try:
-                await ctx.send(file=discord.File("assets/words.txt"))
-            except:
-                await ctx.send("I dont have the permissions required to do this task!")
                 
 # STARBOARD CONFIG
 

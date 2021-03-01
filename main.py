@@ -1,4 +1,4 @@
-import discord, asyncio, sqlite3, ast
+import discord, asyncio, sqlite3, ast, os
 from discord.ext import commands
 from data.secrets import secrets
 
@@ -35,7 +35,10 @@ hyena.remove_command('help')
 async def on_ready():
     print(f'Logged in as {hyena.user}')
 
-cogs = ['cogs.welcome-confg', 'cogs.prefix', 'cogs.moderation']
+cogs = []
+for file in os.listdir('cogs'):
+    if file.endswith('.py'):
+        cogs.append(f'cogs.{file[:-3]}')
 
 if __name__ == '__main__':
     for cog in cogs:

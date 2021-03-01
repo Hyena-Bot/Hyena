@@ -35,8 +35,6 @@ class PrefixStuff(commands.Cog):
 
             await ctx.send(embed=embed)
         if result is not None:
-            prefix = result[0]
-
             lst = result[0]
             lst = ast.literal_eval(lst)
             lst = [n.strip() for n in lst]
