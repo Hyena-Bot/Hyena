@@ -24,7 +24,7 @@ def get_prefix(client, message):
 
 hyena = commands.AutoShardedBot(
     command_prefix=get_prefix,
-    owner_ids=[711444754080071714],
+    owner_ids=[711444754080071714, 699543638765731892],
     intents=discord.Intents.all(),
     allowed_mentions = discord.AllowedMentions(everyone = False, roles = False, users = True)
 )
@@ -106,8 +106,12 @@ async def on_command_error(ctx, error):
     elif isinstance(error, discord.ext.commands.errors.RoleNotFound):
         await ctx.send(f"> <:NO:800323400449916939> {error.argument} is not a valid role!") # works
     
-    elif isinstance(error, discord.ext.commands.errors.MemberNotFound) or isinstance(commands.errors.CheckAnyFailure):
+    elif isinstance(error, discord.ext.commands.errors.MemberNotFound):
         await ctx.send(f"> <:NO:800323400449916939> {error.argument} is not a valid member!") # works
+
+    elif isinstance(error, commands.errors.CheckAnyFailure):
+        print(error.errors)
+        await ctx.send(error.errors[0])
 
     elif isinstance(error, discord.ext.commands.errors.ChannelNotFound):
         await ctx.send(f"> <:NO:800323400449916939> {error.argument} is not a valid channel!") # works
