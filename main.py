@@ -1,26 +1,32 @@
-import discord, asyncio, os, sqlite3
+import discord, asyncio, os, sqlite3, ast
 from discord.ext import commands
 from data.secrets import secrets
 
 def get_prefix(client, message):
+    db = sqlite3.connect("./data/prefixes.sqlite")
+    cursor = db.cursor()
+    cursor.execute(f"SELECT PREFIX FROM guild WHERE GuildID = {message.guild.id}")
+    result = cursor.fetchone()
 
-    try:
-        db = sqlite3.connect("./data/prefixes.sqlite")
-        cursor = db.cursor()
-        cursor.execute(f"SELECT PREFIX FROM guild WHERE GuildID = {message.guild.id}")
-        result = cursor.fetchone()
+    if result:
+        lst = result[0]
+        lst = ast.literal_eval(lst)
+        lst = [n.strip() for n in lst]
 
-        prefix = result[0]
+        lst.append('<@790892810243932160> ')
+        lst.append('<@!790892810243932160> ')
+        lst.append('<@!790892810243932160>')
+        lst.append('<@790892810243932160>')
 
-        return commands.when_mentioned_or(prefix)(client, message)
-    except:
-        return commands.when_mentioned_or("t-")(client, message)
+        return lst
+    if not result:
+        return commands.when_mentioned_or("-")(client, message)
 
-
-hyena = commands.Bot(
+hyena = commands.AutoShardedBot(
     command_prefix=get_prefix,
     owner_ids=[711444754080071714],
-    intents=discord.Intents.all()
+    intents=discord.Intents.all(),
+    allowed_mentions = discord.AllowedMentions(everyone = False, roles = False, users = True)
 )
 
 hyena.remove_command('help')
@@ -96,7 +102,7 @@ async def on_command_error(ctx, error):
     elif isinstance(error, commands.errors.CommandOnCooldown):
         await ctx.send(
             f"> <:NO:800323400449916939> You Are on Cool down, Try again in \
-{ctx.command.get_cooldown_retry_after(ctx):.2f} seconds") # works
+{round(ctx.command.get_cooldown_retry_after(ctx))} seconds") # works
 
     elif isinstance(error, commands.errors.MissingRequiredArgument):
         await ctx.send(f"> <:NO:800323400449916939> {error.param.name} is a required argument :|") #  works
