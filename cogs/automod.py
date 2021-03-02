@@ -14,7 +14,7 @@ class AutoMod(commands.Cog):
         if await automod.auto_mod(message):
             return
             
-        await self.hyena.process_commands(message)
+        # await self.hyena.process_commands(message)
 
     @commands.group()
     async def automod(self, ctx):
