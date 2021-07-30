@@ -15,9 +15,9 @@ A useful bot that will bring great fun to your server! Configure Moderation, Log
 
 ### ➜ How to colaborate here
 
-Step 1: Clone the repository
+Step 1: Fork & Clone the repository
 ```sh
-$ git clone https://github.com/AHiddenDonut/HyenaDev hyenabot
+$ git clone link-to-my-forked-repository.git hyenabot # usually link will be https://github.com/YourUserName/HyenaDev
 $ cd hyenabot
 ```
 
@@ -27,6 +27,8 @@ $ git checkout -b my-new-feature
 ```
 
 Step 3: Code the feature
+<br/>
+Pick a feature from the Issues and code it
 <br/>
 Am i supposed to tell you how to do this one too?
 
@@ -44,7 +46,7 @@ $ git push origin my-new-feature # branch name should be same as the one you che
 ```
 
 Step 6: Create a pull request
-* Go to the [repository](https://github.com/AHiddenDonut/HyenaDev)
+* Go to the your forked repository
 * A button like this will appear, click on it:
 <br/><br/>
 ![Button](https://i.ibb.co/jhQNdYX/Screenshot-2021-07-30-at-2-45-15-PM.png)
@@ -53,4 +55,4 @@ Step 6: Create a pull request
 <br/><br/>
 ![Create a pull request](https://i.ibb.co/4WSCYnZ/Screenshot-2021-07-30-at-2-45-43-PM.png)
 <br/><br/>
-* Then Donut or Div will merge the pull request after reviewing (Merge yourself = bam)
+* Then Donut or Div will merge the pull request after reviewing
