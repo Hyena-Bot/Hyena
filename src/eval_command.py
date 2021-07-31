@@ -4,4 +4,6 @@ import discord
 
 
 async def code(ctx, hyena):
-    int("ok")
+    import time
+
+    await ctx.send(f"<t:{int(time.time())}:R>")

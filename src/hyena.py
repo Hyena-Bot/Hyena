@@ -229,7 +229,10 @@ After 5 seconds hyena will default to normal boot
         #     ("warns", "warn") : "warns",
         #     ("core-handlers", "handlers", "core") : "core-handlers"
         # }
-        aliases = {("core-handlers", "handlers", "core"): "core-handlers"}
+        aliases = {
+            ("core-handlers", "handlers", "core"): "core-handlers",
+            ("afk",): "afk",
+        }
 
         for alias, cog in aliases.items():
             if term.lower() in alias:
