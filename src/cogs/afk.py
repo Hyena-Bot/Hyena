@@ -97,7 +97,6 @@ class Afk(commands.Cog):
                 timestamp = None
                 for data_block in guild_data:
                     if men.id in data_block:
-                        print(data_block)
                         reason = data_block[1]
                         timestamp = data_block[2]
                 await message.channel.send(
