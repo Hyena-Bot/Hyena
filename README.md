@@ -13,12 +13,32 @@ A useful bot that will bring great fun to your server! Configure Moderation, Log
 
 [![](https://top.gg/api/widget/790892810243932160.svg)](https://top.gg/bot/790892810243932160) 
 
+
 ### ➜ How to colaborate here
+
+> For any doubts here, contact Donut#4427 please.
 
 Step 1: Fork & Clone the repository
 ```sh
 $ git clone link-to-my-forked-repository.git hyenabot # usually link will be https://github.com/YourUserName/HyenaDev
 $ cd hyenabot
+```
+
+➜ How to install discord.py 2.0a
+* Firstly, setup a virtual environment
+```sh
+$ pip install virtualenv
+$ cd src
+$ virtualenv venv
+$ ./venv/bin/activate # windows
+$ source ./venv/bin/activate # macos or linux
+```
+
+* Then install the 2.0a
+```sh
+$ git clone https://github.com/Rapptz/discord.py discord.py
+$ cd discord.py
+$ pip install -U .[voice]
 ```
 
 Step 2: Checkout a new branch 

@@ -1,4 +1,7 @@
-import discord, traceback
+import traceback
+
+import discord
+
 from hyena import Hyena
 
 hyena = Hyena()  # dont pass in things here, pass in ./hyena.py
@@ -55,6 +58,7 @@ async def code(ctx, hyena): \n"""
                     file.writelines("   " + line + "\n")
 
             import importlib
+
             import eval_command
 
             importlib.reload(eval_command)
