@@ -50,15 +50,17 @@ Step 3: Code the feature
 <br/>
 Pick a feature from the Issues and code it
 <br/>
-Am i supposed to tell you how to do this one too?
+➜ v2.0a Documentation and v2.0a migration
+- [Documentation](https://discordpy.readthedocs.io/en/master/)
+- [v2.0 Migration](https://discord.com/channels/336642139381301249/559455534965850142/871301063515451393)
+- [Gist for the above](https://gist.github.com/apple502j/f75b4f24652f04de85c7084ffd73ec58)
 
 Step 4: Commit the feature
 ```sh
 $ git commit -m "define your feature here"
 ```
 * For noobs like you (and me) who don't know how to write a commit message:
-<br/>
-* [How to write a proper commit message](https://gist.github.com/develar/273e2eb938792cf5f86451fbac2bcd51)
+- [How to write a proper commit message](https://gist.github.com/develar/273e2eb938792cf5f86451fbac2bcd51)
 
 Step 5: Push the feature
 ```sh
