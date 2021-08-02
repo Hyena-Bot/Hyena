@@ -99,9 +99,7 @@ class Afk(commands.Cog):
                     if men.id in data_block:
                         reason = data_block[1]
                         timestamp = data_block[2]
-                await message.reply(
-                    f"{men} is AFK: {reason} - <t:{int(timestamp)}:R>"
-                )
+                await message.reply(f"{men} is AFK: {reason} - <t:{int(timestamp)}:R>")
                 break
 
 
