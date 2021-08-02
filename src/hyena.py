@@ -35,7 +35,9 @@ class Hyena(commands.AutoShardedBot):
 
         self.help_command = None
         self.secrets = {
-            x: y for x, y in os.environ.items() if x in ["TOKEN", "POSTGRES", "TOPGG"]
+            x: y
+            for x, y in os.environ.items()
+            if x in ["TOKEN", "POSTGRES", "TOPGG", "API_KEY"]
         }
         self.applying = []
         self.prefix_caches = {}
@@ -46,7 +48,7 @@ class Hyena(commands.AutoShardedBot):
             for cog in os.listdir("cogs")
             if cog.endswith(".py") and not cog.startswith("_")
         ]
-        self.colours = [0xFFED1B, 0xF1EFE3, 0x00A8FE, 0x1FEDF9, 0x7CF91F, 0xF91F43]
+        self.colors = [0xFFFDFC, 0x3A4047]
         from utilities.data import automod as am
 
         self.automod_handler = am.Detections
@@ -148,7 +150,7 @@ After 5 seconds hyena will default to normal boot
         channel = self.get_channel(794467787988008973)
         embed = discord.Embed(
             title="Hyena has been booted up!",
-            colour=random.choice(self.colours),
+            colour=random.choice(self.colors),
             description=f"Logged in as {self.user}.",
         )
         try:
@@ -232,6 +234,7 @@ After 5 seconds hyena will default to normal boot
         aliases = {
             ("core-handlers", "handlers", "core"): "core-handlers",
             ("afk",): "afk",
+            ("chatbot", "chat", "ai", "ai-chatbot"): "chatbot",
         }
 
         for alias, cog in aliases.items():
