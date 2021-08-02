@@ -26,7 +26,7 @@ class Hyena(commands.AutoShardedBot):
             owner_ids=[711444754080071714, 699543638765731892],
             intents=hyena_intents,
             allowed_mentions=discord.AllowedMentions(
-                everyone=False, roles=False, users=True
+                everyone=False, roles=False, users=True, replied_user=False
             ),
             description="The main purpose of this bot is to help you manage your discord server in a pretty good way, hyena offers you with a lot of stuff such as AutoModeration, General Moderations, and a lot more.",
             *args,

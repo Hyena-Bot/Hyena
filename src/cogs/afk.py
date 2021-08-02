@@ -32,7 +32,7 @@ class Afk(commands.Cog):
         data.append((ctx.author.id, reason, time.time()))
         self._afk[ctx.guild.id] = data
 
-        await ctx.send(f"{ctx.author.mention} I set your AFK: {reason}")
+        await ctx.reply(f"{ctx.author.mention} I set your AFK: {reason}")
         nick = ctx.author.display_name
         nick = nick[:24] + ".." if len(str(nick)) > 26 else nick
 
@@ -70,7 +70,7 @@ class Afk(commands.Cog):
                     return
                 guild_data.remove(data_block)
         self._afk[message.guild.id] = guild_data
-        await message.channel.send(f"Welcome back {message.author}")
+        await message.reply(f"Welcome back {message.author}")
         if message.author.display_name.startswith("[AFK]"):
             try:
                 await message.author.edit(nick=message.author.display_name[6:])
@@ -99,9 +99,7 @@ class Afk(commands.Cog):
                     if men.id in data_block:
                         reason = data_block[1]
                         timestamp = data_block[2]
-                await message.channel.send(
-                    f"{men} is AFK: {reason} - <t:{int(timestamp)}:R>"
-                )
+                await message.reply(f"{men} is AFK: {reason} - <t:{int(timestamp)}:R>")
                 break
 
 
