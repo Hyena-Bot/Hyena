@@ -7,7 +7,7 @@ import discord
 
 
 def default_filters():
-    with open("./data/filtered-words.json") as f:
+    with open("./data/json/filtered-words.json") as f:
         return json.load(f)
 
 
