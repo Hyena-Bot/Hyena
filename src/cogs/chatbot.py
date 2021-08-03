@@ -350,12 +350,7 @@ NOTE: All of the data mentioned above will be deleted from our database when you
     async def on_message(self, message):
         if message.author.bot:
             return
-        bucket = self.cd_mapping.get_bucket(message)
-        retry_after = bucket.update_rate_limit()
-        if retry_after:
-            return await message.reply(
-                "You are on cooldown! \n**Limits: 1 message per 2 seconds**"
-            )
+
         res = await self.db.fetch(
             "SELECT * FROM chatbot_config WHERE guild_id = $1", message.guild.id
         )
@@ -363,6 +358,12 @@ NOTE: All of the data mentioned above will be deleted from our database when you
             return
         channel = message.guild.get_channel(int(res[0]["channel_id"]))
         if message.channel == channel:
+            bucket = self.cd_mapping.get_bucket(message)
+            retry_after = bucket.update_rate_limit()
+            if retry_after:
+                return await message.reply(
+                    "You are on cooldown! \n**Limits: 1 message per 2 seconds**"
+                )
             resp = await self.get_chatbot_response(message, res[0]["language"])
             chance = random.randrange(1, 30)
             if chance == 7:
