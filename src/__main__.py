@@ -7,10 +7,6 @@ from hyena import Hyena
 hyena = Hyena()  # dont pass in things here, pass in ./hyena.py
 
 
-def cls():
-    os.system("cls" if os.name == "nt" else "clear")
-
-
 @hyena.command(name="load")
 async def load(ctx, cog):
     if ctx.author.id not in hyena.owner_ids:
