@@ -62,7 +62,7 @@ class Handlers(commands.Cog):
             embed = discord.Embed(
                 color=random.choice(self.hyena.colours), timestamp=message.created_at
             )
-            embed.set_thumbnail(url=message.guild.icon_url)
+            embed.set_thumbnail(url=message.guild.icon.url)
             embed.set_author(name="Hyena", icon_url=self.hyena.user.avatar.url)
             embed.add_field(
                 name="Information",

@@ -1,7 +1,3 @@
-import asyncio
-
-import discord
-
-
-async def code(ctx, hyena):
-    __import__("subprocess").Popen(["clear"])
+import asyncio, discord
+async def code(ctx, hyena): 
+   await ctx.send(ctx.guild.icon.url)
