@@ -10,7 +10,11 @@ class GuildConfig:
         )
         if not res:
             return None
-        return await self.hyena.fetch_channel(res[0]["channel_id"])
+        try:
+            ch = await self.hyena.fetch_channel(res[0]["channel_id"])
+        except:
+            ch = None
+        return ch
 
 
 class CommandLogs:
@@ -20,4 +24,7 @@ class CommandLogs:
     async def send(self, ctx, embed):
         channel = await GuildConfig(ctx.guild, self.hyena).get_channel()
         if channel:
-            await channel.send(embed=embed)
+            try:
+                await channel.send(embed=embed)
+            except:
+                pass
