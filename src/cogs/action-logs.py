@@ -23,11 +23,13 @@ class ActionLogs(commands.Cog):
     async def action_logs(self, ctx):
         """Returns the landing page for logging config if invoked subcommand is None."""
         if ctx.invoked_subcommand is None:
+            res = await self.hyena.action_logs_pkg.GuildConfig(ctx.guild, self.hyena).get_channel()
+            current_channel = res.mention if res != None else None
             embed = discord.Embed(color=random.choice(self.hyena.colors))
             embed.set_author(
                 name="Hyena Action Logs", icon_url=self.hyena.user.avatar.url
             )
-            embed.description = """
+            embed.description = f"""
 <:info:846642194052153374> Store all the logs in a channel when an action is taken on a user. Like `BAN | WARN | CLEARWARN | MUTE` etc.
 
 **Commands:**
@@ -40,6 +42,9 @@ Data we store:
 `Channel ID`
 
 NOTE: All of the data mentioned above will be deleted from our database when you run the `disable` command.
+
+**Current Channel:**
+{current_channel}
 """
             embed.set_image(
                 url="https://i.ibb.co/s92wBTJ/Screenshot-2021-08-03-at-11-56-54-AM.png"
