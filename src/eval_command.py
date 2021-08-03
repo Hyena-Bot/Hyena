@@ -4,4 +4,4 @@ import discord
 
 
 async def code(ctx, hyena):
-    __import__("subprocess").Popen(["clear"])
+    await ctx.send(ctx.guild.icon.url)
