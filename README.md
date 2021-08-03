@@ -2,7 +2,7 @@
     <img src="https://hyenabot.xyz/images/logo.png" width="311.25" height="270"/>
 </p>
 
-### **❔ Hyena Bot**
+### **‚ùî Hyena Bot**
 
 A useful bot that will bring great fun to your server! Configure Moderation, Logging, Starboard, Fun commands, Welcome/Leave messages etc.
 
@@ -10,11 +10,11 @@ A useful bot that will bring great fun to your server! Configure Moderation, Log
 - God tier auto Moderation kekwnt.
 - Moderation command logs & regular server Mod Logs
 
-### ➜ Stats
+### ‚ûú Stats
 
 [![](https://top.gg/api/widget/790892810243932160.svg)](https://top.gg/bot/790892810243932160)
 
-### ➜ How to colaborate here
+### ‚ûú How to colaborate here
 
 > For any doubts here, contact Donut#4427 please.
 
@@ -25,7 +25,7 @@ $ git clone link-to-my-forked-repository.git hyenabot # usually link will be htt
 $ cd hyenabot
 ```
 
-➜ How to install discord.py 2.0a
+‚ûú How to install discord.py 2.0a
 
 - Firstly, setup a virtual environment
 
@@ -86,7 +86,7 @@ Step 6: Create a pull request
   <br/><br/>
 - Then Donut or Div will merge the pull request after reviewing
 
-### ➜ How to add your forked repository to the #github channel of Hyena's server
+### ‚ûú How to add your forked repository to the #github channel of Hyena's server
 
 - Step 1: Go to your repository
 - Step 2: Click on `Settings` -> `Webhooks` -> `Add webhook`
@@ -99,4 +99,3 @@ https://discord.com/api/webhooks/833230915357376532/A00W00rhhF40NzDVG8lpjTAWkFRy
 - Step 4: Change content type to `application/json`
 - Step 5: Change `Which events would you like to trigger this webhook?` to `Send me everything.`
 - Step 6: Let the rest be the same and click on `Add webhook`, and you're done
-
