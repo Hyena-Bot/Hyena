@@ -323,7 +323,7 @@ NOTE: All of the data mentioned above will be deleted from our database when you
         confirmation = discord.Embed(
             color=random.choice(self.hyena.colors),
             title="CONFIRMATION",
-            description="Alright, I have disbaled the chatbot systems for this guild!",
+            description="Alright, I have disabled the chatbot systems for this guild!",
             timestamp=ctx.message.created_at,
         )
         confirmation.set_author(
@@ -350,7 +350,6 @@ NOTE: All of the data mentioned above will be deleted from our database when you
     async def on_message(self, message):
         if message.author.bot:
             return
-
         res = await self.db.fetch(
             "SELECT * FROM chatbot_config WHERE guild_id = $1", message.guild.id
         )
