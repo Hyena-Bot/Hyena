@@ -23,7 +23,9 @@ class ActionLogs(commands.Cog):
     async def action_logs(self, ctx):
         """Returns the landing page for logging config if invoked subcommand is None."""
         if ctx.invoked_subcommand is None:
-            res = await self.hyena.action_logs_pkg.GuildConfig(ctx.guild, self.hyena).get_channel()
+            res = await self.hyena.action_logs_pkg.GuildConfig(
+                ctx.guild, self.hyena
+            ).get_channel()
             current_channel = res.mention if res != None else None
             embed = discord.Embed(color=random.choice(self.hyena.colors))
             embed.set_author(

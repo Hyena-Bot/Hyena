@@ -49,9 +49,9 @@ class Hyena(commands.AutoShardedBot):
             if cog.endswith(".py") and not cog.startswith("_")
         ]
         self.colors = [0xFFFDFC, 0x3A4047]
-        from utilities.data import automod as am
         from utilities.data import action_logs
-        
+        from utilities.data import automod as am
+
         self.action_logs_pkg = action_logs
         self.automod_handler = am.Detections
         self.launch_time = datetime.datetime.utcnow()
@@ -237,8 +237,13 @@ After 5 seconds hyena will default to normal boot
             ("core-handlers", "handlers", "core"): "core-handlers",
             ("afk",): "afk",
             ("chatbot", "chat", "ai", "ai-chatbot"): "chatbot",
-            ("mod_actions", "actions", "moderation_actions", "action-logs") : "action-logs",
-            ("moderation", "mod") : "moderation",
+            (
+                "mod_actions",
+                "actions",
+                "moderation_actions",
+                "action-logs",
+            ): "action-logs",
+            ("moderation", "mod"): "moderation",
         }
 
         for alias, cog in aliases.items():

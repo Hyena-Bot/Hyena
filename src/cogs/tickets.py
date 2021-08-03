@@ -1,6 +1,6 @@
 import asyncio
-from fileinput import close
 import random
+from fileinput import close
 
 import discord
 from discord.ext import commands
@@ -37,7 +37,7 @@ async def close_ticket(channel, hyena):
 
         history = _history
     except Exception as e:
-        
+
         history = "Unable to fetch messages"
 
     transcript += history
@@ -113,7 +113,12 @@ class Tickets(commands.Cog):
     def category(self):
         return ["Utils"]
 
-    @commands.group(name='tickets', aliases=['ticket', 'hyena-tickets', 'hyena-ticket'], usage='[p]tickets', description="Wanna let users get help right from the server staff? Without having to go through th ahssle of a modmail? That too highly customizale? Hyena gotcha. Run [p]ticket for further help")
+    @commands.group(
+        name="tickets",
+        aliases=["ticket", "hyena-tickets", "hyena-ticket"],
+        usage="[p]tickets",
+        description="Wanna let users get help right from the server staff? Without having to go through th ahssle of a modmail? That too highly customizale? Hyena gotcha. Run [p]ticket for further help",
+    )
     async def tickets(self, ctx):
         embed = discord.Embed(color=random.choice(self.hyena.colors))
         embed.set_author(name="Hyena Tickets", icon_url=self.hyena.user.avatar.url)
@@ -552,9 +557,7 @@ Note: After 30 seconds it will default to `Yes`
 
         if message.content.lower() not in ["no", "none", "null", "nil", "disable"]:
             try:
-                channel = await commands.RoleConverter().convert(
-                    ctx, message.content
-                )
+                channel = await commands.RoleConverter().convert(ctx, message.content)
                 channel = channel.id
             except:
                 return await message.reply("Invalid channel did you make a typo?")
@@ -668,13 +671,13 @@ Note: After 30 seconds it will default to `Yes`
             embed=embed,
             view=View(self.hyena),
         )
-    
-    @tickets.command(name='close', aliases=['delete', 'del'])
+
+    @tickets.command(name="close", aliases=["delete", "del"])
     @commands.has_permissions(manage_channels=True)
     async def ticket_close(self, ctx):
         await close_ticket(ctx.channel, self.hyena)
-    
-    @tickets.command(name='disable')
+
+    @tickets.command(name="disable")
     @commands.has_permissions(manage_guild=True)
     async def tickets_disable(self, ctx):
         await self.db.execute("DELETE FROM tickets WHERE guild_id = $1", ctx.guild.id)
