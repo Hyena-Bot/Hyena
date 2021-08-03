@@ -313,7 +313,7 @@ NOTE: All of the data mentioned above will be deleted from our database when you
         )
         if not res:
             return await ctx.send(
-                "Bruh, you don't even have logging set up for this guild :|"
+                "Bruh, you don't even have chatbot set up for this guild :|"
             )
         if res:
             await self.db.execute(
