@@ -37,7 +37,8 @@ class Afk(commands.Cog):
         nick = nick[:24] + ".." if len(str(nick)) > 26 else nick
 
         try:
-            await ctx.author.edit(nick=f"[AFK] {nick}")
+            if not "[AFK] " in str(ctx.author.nickname):
+                await ctx.author.edit(nick=f"[AFK] {nick}")
         except:
             pass
 
