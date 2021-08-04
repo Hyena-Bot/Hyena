@@ -152,7 +152,7 @@ class Moderation(commands.Cog):
 
         if success:
             try:
-                await member.send(
+                await unbanned_user.send(
                     f"**{ctx.guild.name}:** You have been 🔓 unbanned \n**Reason:** {reason}"
                 )
             except:

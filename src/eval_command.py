@@ -4,4 +4,4 @@ import discord
 
 
 async def code(ctx, hyena):
-    await ctx.send(ctx.guild.icon.url)
+    await ctx.send([x for x in ctx.guild.me.guild_permissions])
