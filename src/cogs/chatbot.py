@@ -6,6 +6,7 @@ from typing import List, Union
 import aiohttp
 import discord
 from discord.ext import commands
+from numpy import isin
 
 
 class Chatbot(commands.Cog):
@@ -349,6 +350,8 @@ NOTE: All of the data mentioned above will be deleted from our database when you
     @commands.Cog.listener()
     async def on_message(self, message):
         if message.author.bot:
+            return
+        if message.guild is None or isinstance(message.channel, discord.DMChannel):
             return
         res = await self.db.fetch(
             "SELECT * FROM chatbot_config WHERE guild_id = $1", message.guild.id
