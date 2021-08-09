@@ -58,14 +58,6 @@ class Hyena(commands.AutoShardedBot):
         self.topgg = topgg.DBLClient(self, self.secrets["TOPGG"])
 
     def run(self):
-        try:
-            for cog in self.hyena_cogs:
-                try:
-                    self.load_extension(cog)
-                except Exception as e:
-                    raise e
-        except Exception as e:
-            raise e
 
         prompt = """
 Which mode do you wanna boot to?
@@ -78,13 +70,30 @@ CDev [All commands but only devs can run commands]
 After 5 seconds hyena will default to normal boot     
 """
         try:
-            self.current_mode_type = inputimeout.inputimeout(
+            current_mode_type = inputimeout.inputimeout(
                 prompt=prompt + "\n", timeout=5
-            ).lower()
+            ).lower().strip()
         except:
-            self.current_mode_type = "normal"
-        print(f"----Continuing with {self.current_mode_type} mode----")
-
+            current_mode_type = "normal"
+        
+        if current_mode_type in ['', ' ', 'normal', 'production', 'prod']:
+            self.current_mode_type = 'normal'
+        elif current_mode_type in ['dev', 'development', 'prodnt', 'prodn\'t']:
+            self.current_mode_type = "dev"
+        elif current_mode_type in ['cdev', 'devcommands']:
+            self.current_mode_type = 'cdev'
+        else: self.current_mode_type = 'normal'
+        
+        print(f"--- Continuing with {self.current_mode_type.title()} mode ---")
+        if self.current_mode_type != 'dev':
+            try:
+                for cog in self.hyena_cogs:
+                    try:
+                        self.load_extension(cog)
+                    except Exception as e:
+                        print(e)
+            except Exception as e:
+                raise e
         super().run(self.secrets["TOKEN"])
 
     async def _get_hyena_prefix(self, hyena, message):
