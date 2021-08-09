@@ -92,7 +92,7 @@ After 5 seconds hyena will default to normal boot
                     try:
                         self.load_extension(cog)
                     except Exception as e:
-                        print(e)
+                        raise e
             except Exception as e:
                 raise e
         super().run(self.secrets["TOKEN"])
