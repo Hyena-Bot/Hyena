@@ -70,22 +70,23 @@ CDev [All commands but only devs can run commands]
 After 5 seconds hyena will default to normal boot     
 """
         try:
-            current_mode_type = inputimeout.inputimeout(
-                prompt=prompt + "\n", timeout=5
-            ).lower().strip()
+            current_mode_type = (
+                inputimeout.inputimeout(prompt=prompt + "\n", timeout=5).lower().strip()
+            )
         except:
             current_mode_type = "normal"
-        
-        if current_mode_type in ['', ' ', 'normal', 'production', 'prod']:
-            self.current_mode_type = 'normal'
-        elif current_mode_type in ['dev', 'development', 'prodnt', 'prodn\'t']:
+
+        if current_mode_type in ["", " ", "normal", "production", "prod"]:
+            self.current_mode_type = "normal"
+        elif current_mode_type in ["dev", "development", "prodnt", "prodn't"]:
             self.current_mode_type = "dev"
-        elif current_mode_type in ['cdev', 'devcommands']:
-            self.current_mode_type = 'cdev'
-        else: self.current_mode_type = 'normal'
-        
+        elif current_mode_type in ["cdev", "devcommands"]:
+            self.current_mode_type = "cdev"
+        else:
+            self.current_mode_type = "normal"
+
         print(f"--- Continuing with {self.current_mode_type.title()} mode ---")
-        if self.current_mode_type != 'dev':
+        if self.current_mode_type != "dev":
             try:
                 for cog in self.hyena_cogs:
                     try:
