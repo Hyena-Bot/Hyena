@@ -11,7 +11,8 @@ class WelcomeGoodbye(commands.Cog):
         self.hyena, self.colours = hyena, colours
         self.link_regex = re.compile(
             r"^(?:http)s?://"  # http:// or https://
-            r"(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|"  # domain...
+            # domain...
+            r"(?:(?:[A-Z0-9](?:[A-Z0-9-]{0,61}[A-Z0-9])?\.)+(?:[A-Z]{2,6}\.?|[A-Z0-9-]{2,}\.?)|"
             r"\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})"  # ...or ip
             r"(?:/?|[/?]\S+)$",
             re.IGNORECASE,
@@ -47,21 +48,20 @@ class WelcomeGoodbye(commands.Cog):
 Variables:
 **Note: The variables will not work with `embed thumbnail`.**
 ```apache
-{mention}: User's mention/ping
-{name}: User's Name
-{proper}: User's proper name in the format of `Div_100#5748`
-{discriminator}: User's Tag/discriminator
-{tag}: An alias for {discriminator}
-{id}: User's ID
-{joined_at}: The date they joined at in the format of DD/MM/YYYY
-{member_count}: The toal member's in the server.
+{mention}: User's mention/ping | {name}: User's Name 
+{discriminator}: User's Tag/discriminator | {tag}: An alias for {discriminator}
+{id}: User's ID | {proper}: User's proper name in the format of `Div_100#5748`
+{joined_at}: The date they joined at in the format of DD/MM/YYYY | {member_count}: The toal member's in the server.
 
 
-{inviter_name}: The name of the user who invited them.
-{inviter_mention}: Mention/ping of the Inviter.
-{inviter_proper}: Proper format of the inviter in the form of `Div_100#5748`
-{inviter_id}: The ID of the inviter.
+{inviter_name}: The name of the user who invited them. | {inviter_mention}: Mention/ping of the Inviter.
+{inviter_proper}: Proper format of the inviter in the form of `Div_100#5748`| {inviter_id}: The ID of the inviter.
 ```
+
+Data we store: 
+`Guild ID`, `Channel ID`, `Message`, `Title`, `Description`, `Thumbnail`, `Footer`, `Embed enabled or not`
+
+Note: Running the disable command will delete all the above data from our databases
 """,
                 color=random.choice(self.colours),
             )
@@ -279,21 +279,20 @@ Variables:
 Variables:
 **Note: The variables will not work with `embed thumbnail`.**
 ```apache
-{mention}: User's mention/ping
-{name}: User's Name
-{proper}: User's proper name in the format of `Div_100#5748`
-{discriminator}: User's Tag/discriminator
-{tag}: An alias for {discriminator}
-{id}: User's ID
-{joined_at}: The date they joined at in the format of DD/MM/YYYY
-{member_count}: The toal member's in the server.
+{mention}: User's mention/ping | {name}: User's Name 
+{discriminator}: User's Tag/discriminator | {tag}: An alias for {discriminator}
+{id}: User's ID | {proper}: User's proper name in the format of `Div_100#5748`
+{joined_at}: The date they joined at in the format of DD/MM/YYYY | {member_count}: The toal member's in the server.
 
 
-{inviter_name}: The name of the user who invited them.
-{inviter_mention}: Mention/ping of the Inviter.
-{inviter_proper}: Proper format of the inviter in the form of `Div_100#5748`
-{inviter_id}: The ID of the inviter.
+{inviter_name}: The name of the user who invited them. | {inviter_mention}: Mention/ping of the Inviter.
+{inviter_proper}: Proper format of the inviter in the form of `Div_100#5748`| {inviter_id}: The ID of the inviter.
 ```
+
+Data we store: 
+`Guild ID`, `Channel ID`, `Message`, `Title`, `Description`, `Thumbnail`, `Footer`, `Embed enabled or not`
+
+Note: Running the disable command will delete all the above data from our databases
 """,
                 color=random.choice(self.colours),
             )
