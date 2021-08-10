@@ -1,4 +1,5 @@
 import ast
+import asyncio
 import contextlib
 import math
 import random
@@ -315,6 +316,229 @@ Guild Membercount: {guild.member_count}
             info_embed.add_field(name="User", value=value)
 
             await console.send(embeds=[*traceback_embeds, info_embed])
+
+    async def format_welcome_goodbye(self, msg, member):
+        """
+        {mention}: User's mention/ping
+        {name}: User's Name
+        {proper}: User's proper name in the format of `Div_100#5748`
+        {discriminator}: User's Tag/discriminator
+        {tag}: An alias for {discriminator}
+        {id}: User's ID
+        {joined_at}: The date they joined at in the format of DD/MM/YYYY
+        {member_count}: The toal member's in the server.
+
+        {inviter_name}: The name of the user who invited them.
+        {inviter_mention}: Mention/ping of the Inviter.
+        {inviter_proper}: Proper format of the inviter in the form of `Div_100#5748`
+        {inviter_id}: The ID of the inviter.
+        """
+        msg = str(msg)
+        msg = msg.replace("{mention}", member.mention)
+        msg = msg.replace("{name}", member.name)
+        msg = msg.replace("{proper}", str(member))
+        msg = msg.replace("{discriminator}", str(member.discriminator)).replace(
+            "{tag}", str(member.discriminator)
+        )
+        msg = msg.replace("{id}", str(member.id))
+        msg = msg.replace("{joined_at}", str(member.joined_at.strftime("%d/%m/%Y")))
+        msg = msg.replace("{member_count}", str(member.guild.member_count))
+
+        if "inviter" not in msg:
+            return msg
+
+        db = sqlite3.connect("./data/who_invited_whom.sqlite")
+        cur = db.cursor()
+
+        cur.execute(
+            "SELECT inviter_id FROM invites WHERE guild_id = ? AND user_id = ?",
+            (member.guild.id, member.id),
+        )
+        data = cur.fetchone()
+        if data is None:
+            msg = (
+                msg.replace("{inviter_name}", "undefined")
+                .replace("{inviter_id}", "undefined")
+                .replace("{inviter_proper}", "undefined")
+                .replace("{inviter_mention}", "undefined")
+            )
+            return msg
+        inviter = member.guild.get_member(data[0])
+        if inviter is None:
+            msg = (
+                msg.replace("{inviter_name}", "undefined")
+                .replace("{inviter_id}", "undefined")
+                .replace("{inviter_proper}", "undefined")
+                .replace("{inviter_mention}", "undefined")
+            )
+            return msg
+
+        msg = (
+            msg.replace("{inviter_name}", inviter.name)
+            .replace("{inviter_id}", str(inviter.id))
+            .replace("{inviter_proper}", str(inviter))
+            .replace("{inviter_mention}", inviter.mention)
+        )
+        return msg
+
+    @commands.Cog.listener()
+    async def on_member_join(self, member):
+        await asyncio.sleep(3)
+        db = self.hyena.welcome_goodbye_db
+        data = await db.fetchrow(
+            "SELECT * FROM hyena_welcome WHERE guild_id = $1", member.guild.id
+        )
+
+        if data is None:
+            return
+        data = list(data)
+        if data[2] is None:
+            return
+
+        channel = member.guild.get_channel(data[2])
+        if not isinstance(channel, discord.TextChannel):
+            return
+
+        if data[7] is None:
+            data[7] = "yes"
+
+        if data[7].lower() == "no" and data[1] is None:
+            return
+
+        if data[3] in [None, ""] and data[6] in [None, ""] and data[1] in [None, ""]:
+            return
+
+        if (data[2], data[3], data[4], data[5], data[6], data[7]) == (
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+        ):
+            msg = data[1]
+            m = await self.format_welcome_goodbye(msg, member)
+            try:
+                await channel.send(m)
+            except:
+                return
+        else:
+            print(data[7])
+            if (data[3] is None and data[6] is None) or data[7].lower() == "no":
+                msg = data[1]
+                m = await self.format_welcome_goodbye(msg, member)
+                try:
+                    await channel.send(m)
+                except:
+                    return
+            else:
+                title = data[6]
+                description = data[3]
+                footer = data[4]
+                thumbnail = data[5]
+                embed = discord.Embed(color=random.choice(self.hyena.colors))
+                if title:
+                    embed.title = await self.format_welcome_goodbye(title, member)
+                if description:
+                    embed.description = await self.format_welcome_goodbye(
+                        description, member
+                    )
+                if footer:
+                    embed.set_footer(
+                        text=await self.format_welcome_goodbye(footer, member)
+                    )
+                if thumbnail:
+                    embed.set_thumbnail(url=str(thumbnail))
+
+                try:
+                    if data[1] is None:
+                        await channel.send(embed=embed)
+                    else:
+                        await channel.send(
+                            embed=embed,
+                            content=await self.format_welcome_goodbye(data[1], member),
+                        )
+                except Exception as e:
+                    print(e)
+
+    @commands.Cog.listener()
+    async def on_member_remove(self, member):
+        db = self.hyena.welcome_goodbye_db
+        data = await db.fetchrow(
+            "SELECT * FROM hyena_goodbye WHERE guild_id = $1", member.guild.id
+        )
+
+        if data is None:
+            return
+        data = list(data)
+        if data[2] is None:
+            return
+
+        channel = member.guild.get_channel(data[2])
+        if not isinstance(channel, discord.TextChannel):
+            return
+
+        if data[7] is None:
+            data[7] = "yes"
+
+        if data[7].lower() == "no" and data[1] is None:
+            return
+
+        if data[3] in [None, ""] and data[6] in [None, ""] and data[1] in [None, ""]:
+            return
+
+        if (data[2], data[3], data[4], data[5], data[6], data[7]) == (
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+        ):
+            msg = data[1]
+            m = await self.format_welcome_goodbye(msg, member)
+            try:
+                await channel.send(m)
+            except:
+                return
+        else:
+            print(data[7])
+            if (data[3] is None and data[6] is None) or data[7].lower() == "no":
+                msg = data[1]
+                m = await self.format_welcome_goodbye(msg, member)
+                try:
+                    await channel.send(m)
+                except:
+                    return
+            else:
+                title = data[6]
+                description = data[3]
+                footer = data[4]
+                thumbnail = data[5]
+                embed = discord.Embed(color=random.choice(self.hyena.colors))
+                if title:
+                    embed.title = await self.format_welcome_goodbye(title, member)
+                if description:
+                    embed.description = await self.format_welcome_goodbye(
+                        description, member
+                    )
+                if footer:
+                    embed.set_footer(
+                        text=await self.format_welcome_goodbye(footer, member)
+                    )
+                if thumbnail:
+                    embed.set_thumbnail(url=str(thumbnail))
+
+                try:
+                    if data[1] is None:
+                        await channel.send(embed=embed)
+                    else:
+                        await channel.send(
+                            embed=embed,
+                            content=await self.format_welcome_goodbye(data[1], member),
+                        )
+                except Exception as e:
+                    print(e)
 
 
 def setup(hyena):
