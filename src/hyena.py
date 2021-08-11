@@ -262,6 +262,7 @@ After 5 seconds hyena will default to normal boot
             ): "action-logs",
             ("moderation", "mod"): "moderation",
             ("utils", "utilities", "util"): "utils",
+            ("serverconf", "conf", "server"): "serverconf",
         }
 
         for alias, cog in aliases.items():
