@@ -70,7 +70,7 @@ async def code(ctx, hyena): \n"""
 """
             await ctx.send(embed=embed)
     else:
-        await ctx.send("What are You thinking HUH? You Cannot Use This???")
+        await ctx.send("Sorry, this is a Developer only command!")
 
 
 if __name__ == "__main__":

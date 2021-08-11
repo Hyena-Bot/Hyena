@@ -65,7 +65,7 @@ class Handlers(commands.Cog):
 
         if message.content in [f"<@!{self.hyena.user.id}>", f"<@{self.hyena.user.id}>"]:
             embed = discord.Embed(
-                color=random.choice(self.hyena.colours), timestamp=message.created_at
+                color=random.choice(self.hyena.colors), timestamp=message.created_at
             )
             embed.set_thumbnail(url=message.guild.icon.url)
             embed.set_author(name="Hyena", icon_url=self.hyena.user.avatar.url)
@@ -119,7 +119,7 @@ Guild Invite: {invite}
 """
         )
         for channel in guild.text_channels:
-            value = random.choice(self.hyena.colours)
+            value = random.choice(self.hyena.colors)
 
             join_embed = discord.Embed(
                 title="Hyena Info",
@@ -315,6 +315,7 @@ Guild Membercount: {guild.member_count}
             info_embed.add_field(name="User", value=value)
 
             await console.send(embeds=[*traceback_embeds, info_embed])
+            raise error
 
 
 def setup(hyena):
