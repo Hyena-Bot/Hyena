@@ -222,8 +222,6 @@ class TextFun(commands.Cog):
 
     # commands:
 
-    
-
 
 # ---------------------------- End of Text Fun ---------------------------------
 
