@@ -29,7 +29,7 @@ class Dev(commands.Cog):
             embed = discord.Embed(
                 color=random.choice(self.hyena.colors), timestamp=ctx.message.created_at
             )
-            embed.set_author(name="Blacklist", icon_url=self.hyena.user.avatar_url)
+            embed.set_author(name="Blacklist", icon_url=self.hyena.user.avatar.url)
             embed.add_field(
                 name="Commands:",
                 value="""
@@ -40,7 +40,7 @@ class Dev(commands.Cog):
 `update [id] [new_reason]`: Update a reason for a blacklisted user.   
 """,
             )
-            embed.set_thumbnail(url=self.hyena.user.avatar_url)
+            embed.set_thumbnail(url=self.hyena.user.avatar.url)
 
             await ctx.send(embed=embed)
 
@@ -287,12 +287,12 @@ class Dev(commands.Cog):
                 )
                 embed.set_author(
                     name=f"{message.author}--> {member}",
-                    icon_url=message.author.avatar_url,
+                    icon_url=message.author.avatar.url,
                 )
                 embed.add_field(name="Message:", value=message.content, inline=False)
                 embed.set_footer(
                     text=f"Hyena-Mail {message.author.id} SEND",
-                    icon_url=message.guild.icon_url,
+                    icon_url=message.guild.icon.url,
                 )
                 try:
                     embed.set_image(url=message.attachments[0].url)
@@ -315,11 +315,11 @@ class Dev(commands.Cog):
         )
         embed.set_author(
             name=f"{message.author} --> Hyena Support",
-            icon_url=message.author.avatar_url,
+            icon_url=message.author.avatar.url,
         )
         embed.add_field(name="Message:", value=message.content, inline=False)
         embed.set_footer(
-            text=f"Hyena-Mail {message.author.id} RECV", icon_url=ch.guild.icon_url
+            text=f"Hyena-Mail {message.author.id} RECV", icon_url=ch.guild.icon.url
         )
         try:
             embed.set_image(url=message.attachments[0].url)
@@ -361,11 +361,11 @@ class Dev(commands.Cog):
             color=random.choice(self.hyena.colors), timestamp=ctx.message.created_at
         )
         embed.set_author(
-            name=f"{ctx.author}--> {member}", icon_url=ctx.author.avatar_url
+            name=f"{ctx.author}--> {member}", icon_url=ctx.author.avatar.url
         )
         embed.add_field(name="Message:", value=message, inline=False)
         embed.set_footer(
-            text=f"Hyena-Mail {ctx.message.author.id}", icon_url=ctx.guild.icon_url
+            text=f"Hyena-Mail {ctx.message.author.id}", icon_url=ctx.guild.icon.url
         )
         try:
             embed.set_image(url=ctx.message.attachments[0].url)

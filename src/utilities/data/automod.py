@@ -126,7 +126,10 @@ class Detections:
         messages = list(
             filter(
                 lambda m: m.author == message.author
-                and (datetime.datetime.utcnow() - m.created_at).seconds < 10,
+                and (
+                    datetime.datetime.now(datetime.timezone.utc) - m.created_at
+                ).seconds
+                < 10,
                 self.hyena.cached_messages,
             )
         )
@@ -150,7 +153,7 @@ class Detections:
         attachments = [x.url for x in message.attachments]
         image_urls = sorted(set([*urls, *attachments]))
 
-        if len(urls) == 0:
+        if len(image_urls) == 0:
             return False
 
         for url in image_urls:
