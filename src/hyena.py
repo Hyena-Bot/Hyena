@@ -51,7 +51,9 @@ class Hyena(commands.AutoShardedBot):
         self.colors = [0xFFFDFC, 0x3A4047]
         from utilities.data import action_logs
         from utilities.data import automod as am
+        from utilities.data import tools
 
+        self.tools = tools
         self.action_logs_pkg = action_logs
         self.automod_handler = am.Detections
         self.launch_time = datetime.datetime.utcnow()
@@ -98,7 +100,7 @@ After 5 seconds hyena will default to normal boot
         super().run(self.secrets["TOKEN"])
 
     async def _get_hyena_prefix(self, hyena, message):
-        base = [f"<@!{hyena.user.id}> ", f"<@{hyena.user.id}>"]
+        base = [f"<@!{hyena.user.id}> ", f"<@{hyena.user.id}> "]
         prefixes = None
         try:
             caches = self.prefix_caches[message.guild.id]
@@ -108,16 +110,15 @@ After 5 seconds hyena will default to normal boot
 
         if prefixes is None:
             result = await hyena.main_db.fetch(
-                f"SELECT PREFIX FROM guild WHERE GuildID = $1", message.guild.id
+                f"SELECT prefix FROM prefixes WHERE guild_id = $1", message.guild.id
             )
 
             if result:
                 lst = result[0]["prefix"]
-                lst = ast.literal_eval(lst)
                 prefixes = [*lst, *base]
                 hyena.prefix_caches[message.guild.id] = lst
             if not result:
-                return commands.when_mentioned_or("-")(hyena, message)
+                prefixes = ["-", *base]
 
         return prefixes
 
@@ -260,11 +261,13 @@ After 5 seconds hyena will default to normal boot
                 "action-logs",
             ): "action-logs",
             ("moderation", "mod"): "moderation",
+            ("utils", "utilities", "util"): "utils",
         }
 
         for alias, cog in aliases.items():
             if term.lower() in alias:
                 return cog
+        return term
 
     async def handle_load(self, ctx, cog: str):
         if cog in ["*", "all"]:

@@ -250,7 +250,7 @@ class Moderation(commands.Cog):
         except:
             return await ctx.send("I dont seem to have the permissions")
 
-        embed = discord.Embed(colour=random.choice(self.hyena.colours))
+        embed = discord.Embed(colour=random.choice(self.hyena.colors))
         embed.set_author(name=f"LOCK | {channel.name}", icon_url=ctx.author.avatar.url)
         embed.add_field(name="Channel", value=f"{channel.name}")
         embed.add_field(name="Moderator", value=f"{ctx.author.name}")
@@ -281,7 +281,7 @@ class Moderation(commands.Cog):
         except:
             return await ctx.send("I dont seem to have the permissions")
 
-        embed = discord.Embed(colour=random.choice(self.hyena.colours))
+        embed = discord.Embed(colour=random.choice(self.hyena.colors))
         embed.set_author(
             name=f"UNLOCK | {channel.name}", icon_url=ctx.author.avatar.url
         )
@@ -383,7 +383,7 @@ class Moderation(commands.Cog):
                     "https://tenor.com/view/nuclear-explosion-nuke-bomb-boom-gif-16286228"
                 )
 
-                em = discord.Embed(colour=random.choice(self.hyena.colours))
+                em = discord.Embed(colour=random.choice(self.hyena.colors))
                 em.set_author(
                     name=f"NUKE | {channel.mention}", icon_url=ctx.author.avatar.url
                 )
@@ -443,7 +443,7 @@ class Moderation(commands.Cog):
 
         await ctx.send(f"🔨 Softbanned `{member}` \n**Reason:** {reason}")
 
-        embed = discord.Embed(color=random.choice(self.hyena.colours))
+        embed = discord.Embed(color=random.choice(self.hyena.colors))
         embed.set_author(name=f"SOFTBAN | {member}", icon_url=member.avatar.url)
         embed.add_field(name="User", value=f"{member.name}")
         embed.add_field(name="Moderator", value=f"{ctx.author.name}")
@@ -454,6 +454,41 @@ class Moderation(commands.Cog):
         )
 
         await self.logging.send(ctx, embed)
+
+    @commands.command(
+        name="nickname",
+        aliases=["nick"],
+        usage="[p]nickname [member] [nickname : optional]",
+        description="Change the nickname of a member",
+    )
+    @commands.bot_has_permissions(manage_nicknames=True)
+    @commands.cooldown(1, 3, commands.BucketType.user)
+    async def nickname(self, ctx, member: discord.Member, *, nickname=None):
+        if nickname == None:
+            nickname = member.name
+        if ctx.author == member:
+            try:
+                await member.edit(nick=nickname)
+            except:
+                return await ctx.send(
+                    "Uh oh! Something went wrong, seems like the bot doesn't have the permissions"
+                )
+
+        if ctx.author.guild_permissions.manage_nicknames:
+            return await ctx.send(
+                "> <:NO:800323400449916939> You are missing the `manage_nicknames` permission(s)!"
+            )
+
+        if member.top_role >= ctx.author.top_role:
+            return await ctx.send("You cannot do this action due to the role hierarchy")
+
+        try:
+            await member.edit(nick=nickname)
+        except:
+            return await ctx.send(
+                "Uh oh! Something went wrong, seems like the bot doesn't have the permissions"
+            )
+        await ctx.send(f"Changed {member.name}'s nickname to `{nickname}`")
 
 
 def setup(hyena):
