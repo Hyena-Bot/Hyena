@@ -222,10 +222,6 @@ class TextFun(commands.Cog):
 
     # commands:
 
-    @commands.command()
-    async def sus(self, ctx):
-        await ctx.send("SUSU")
-
 
 # ---------------------------- End of Text Fun ---------------------------------
 

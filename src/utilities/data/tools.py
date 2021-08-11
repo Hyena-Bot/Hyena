@@ -85,3 +85,12 @@ def convert_time(time):
         return -2
 
     return val * time_dict[unit]
+
+
+async def check_family_friendly(ctx, hyena):
+    res = await hyena.main_db2.fetch(
+        "SELECT * FROM server_config WHERE guild_id = $1", ctx.guild.id
+    )
+    if res:
+        return res[0]["family_friendly"]
+    return False
