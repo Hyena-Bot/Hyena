@@ -6,7 +6,6 @@ from typing import List, Union
 import aiohttp
 import discord
 from discord.ext import commands
-from numpy import isin
 
 
 class Chatbot(commands.Cog):
