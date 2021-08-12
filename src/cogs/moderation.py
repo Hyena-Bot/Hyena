@@ -179,9 +179,7 @@ class Moderation(commands.Cog):
         description="Clear messages from a channel",
     )
     @commands.cooldown(1, 3, commands.BucketType.user)
-    @commands.check_any(
-        commands.has_permissions(manage_channels=True), commands.is_owner()
-    )
+    @commands.has_permissions(manage_messages=True)
     @commands.bot_has_permissions(manage_messages=True)
     async def purge(self, ctx, amount, member: discord.Member = None):
         await ctx.message.delete()
@@ -236,9 +234,7 @@ class Moderation(commands.Cog):
         description="Lock a channel so that people can't talk in it",
     )
     @commands.cooldown(1, 3, commands.BucketType.user)
-    @commands.check_any(
-        commands.has_permissions(manage_channels=True), commands.is_owner()
-    )
+    @commands.has_permissions(manage_channels=True)
     @commands.bot_has_permissions(manage_channels=True)
     async def lock_channel(self, ctx, channel: discord.TextChannel = None):
         if channel is None:
@@ -267,9 +263,7 @@ class Moderation(commands.Cog):
         description="Unlock channel to give access to the people to talk in the channel",
     )
     @commands.cooldown(1, 3, commands.BucketType.user)
-    @commands.check_any(
-        commands.has_permissions(manage_channels=True), commands.is_owner()
-    )
+    @commands.has_permissions(manage_channels=True)
     @commands.bot_has_permissions(manage_channels=True)
     async def unlock_channel(self, ctx, channel: discord.TextChannel = None):
         if channel is None:
@@ -402,7 +396,7 @@ class Moderation(commands.Cog):
         description="Bans and immediately unbans a member to act as a purging kick.",
         usage="[p]softban [member] [delete_days : optional] [reason : optional]",
     )
-    @commands.check_any(commands.has_permissions(ban_members=True), commands.is_owner())
+    @commands.has_permissions(ban_members=True)
     @commands.cooldown(1, 3, commands.BucketType.user)
     @commands.bot_has_permissions(ban_members=True)
     async def softban(
