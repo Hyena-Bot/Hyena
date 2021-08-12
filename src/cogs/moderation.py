@@ -5,6 +5,7 @@ from typing import Optional
 
 import discord
 from discord.ext import commands
+
 from utilities.data import moderation_actions
 
 
@@ -61,7 +62,19 @@ class Moderation(commands.Cog):
                 )
 
                 await self.logging.send(ctx, embed)
-                await moderation_actions.log(self.db, self.hyena, {"user_id": member.id, "data": {"action": "Ban", "reason": reason, "delete_days": delete_days}}, ctx)
+                await moderation_actions.log(
+                    self.db,
+                    self.hyena,
+                    {
+                        "user_id": member.id,
+                        "data": {
+                            "action": "Ban",
+                            "reason": reason,
+                            "delete_days": delete_days,
+                        },
+                    },
+                    ctx,
+                )
             else:
                 if member == ctx.author:
                     return await ctx.send("You can't ban yourself. 🤦🏻‍")
@@ -107,7 +120,15 @@ class Moderation(commands.Cog):
                 )
 
                 await self.logging.send(ctx, embed)
-                await moderation_actions.log(self.db, self.hyena, {"user_id": member.id, "data": {"action": "Kick", "reason": reason}}, ctx)
+                await moderation_actions.log(
+                    self.db,
+                    self.hyena,
+                    {
+                        "user_id": member.id,
+                        "data": {"action": "Kick", "reason": reason},
+                    },
+                    ctx,
+                )
             else:
                 if member == ctx.author:
                     return await ctx.send("You can't kick yourself. 🤦🏻‍")
@@ -451,7 +472,19 @@ class Moderation(commands.Cog):
         )
 
         await self.logging.send(ctx, embed)
-        await moderation_actions.log(self.db, self.hyena, {"user_id": member.id, "data": {"action": "SotBan", "reason": reason, "delete_days": delete_days}}, ctx)
+        await moderation_actions.log(
+            self.db,
+            self.hyena,
+            {
+                "user_id": member.id,
+                "data": {
+                    "action": "SotBan",
+                    "reason": reason,
+                    "delete_days": delete_days,
+                },
+            },
+            ctx,
+        )
 
     @commands.command(
         name="nickname",

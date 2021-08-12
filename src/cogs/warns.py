@@ -62,7 +62,15 @@ class Warns(commands.Cog):
             val = (after, ctx.guild.id, member.id)
         await self.db.execute(sql, *val)
         await ctx.send(f"Successfully warned {member} for {reason}.")
-        await moderation_actions.log(self.db, self.hyena, {"user_id": member.id, "data": {"action": "Warn", "reason": reason, "warn_id": id}}, ctx)
+        await moderation_actions.log(
+            self.db,
+            self.hyena,
+            {
+                "user_id": member.id,
+                "data": {"action": "Warn", "reason": reason, "warn_id": id},
+            },
+            ctx,
+        )
 
         embed = discord.Embed(color=random.choice(self.colours))
         embed.set_author(name=f"WARN | {member}", icon_url=member.avatar.url)
