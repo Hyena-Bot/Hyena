@@ -314,7 +314,7 @@ NOTE: All of the data mentioned above will be deleted from our database when you
         if not webhook:
             return
 
-        delta = datetime.datetime.now() - member.created_at
+        delta = datetime.datetime.now(datetime.timezone.utc) - member.created_at
         created_days = delta.days
 
         cobj = member.created_at.strftime(r"%d/%m/%Y %H:%M:%S")

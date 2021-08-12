@@ -32,9 +32,7 @@ class Utilities(commands.Cog):
         description="Make a poll with 👍 & 👎 reactions",
     )
     @commands.cooldown(1, 3, commands.BucketType.user)
-    @commands.check_any(
-        commands.has_permissions(manage_messages=True), commands.is_owner()
-    )
+    @commands.has_permissions(manage_messages=True)
     async def quickpoll(self, ctx, *, question):
         embed = discord.Embed(
             title="📊 POLL 📊",
@@ -74,9 +72,7 @@ class Utilities(commands.Cog):
         usage="[p]poll [question divided by | or , or quoted] [answers divided by | or , or quoted]",
     )
     @commands.cooldown(1, 3, commands.BucketType.user)
-    @commands.check_any(
-        commands.has_permissions(manage_messages=True), commands.is_owner()
-    )
+    @commands.has_permissions(manage_messages=True)
     async def poll(self, ctx, *, _str: str):
         if "|" in _str:
             _list = _str.split("|")
@@ -523,9 +519,7 @@ Python Version: {os.popen("python3 --version").read()}
         description="Set the slow mode delay for a specific channel",
     )
     @commands.cooldown(1, 3, commands.BucketType.user)
-    @commands.check_any(
-        commands.has_permissions(manage_channels=True), commands.is_owner()
-    )
+    @commands.has_permissions(manage_channeks=True)
     @commands.bot_has_permissions(manage_channels=True)
     async def slowmode(self, ctx, time: str, channel: discord.TextChannel = None):
         if channel == None:
@@ -682,9 +676,7 @@ Python Version: {os.popen("python3 --version").read()}
         usage="[p]addemoji [emoji] [name : optional | mandatory for link images]",
         description="Add an emoji to your server. Who has time to download the emoji?",
     )
-    @commands.check_any(
-        commands.has_permissions(manage_emojis=True), commands.is_owner()
-    )
+    @commands.has_permissions(manage_emojis=True)
     @commands.bot_has_permissions(manage_emojis=True)
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def steal(self, ctx, emoji: str = None, emoji_name=None):
@@ -886,5 +878,183 @@ Exception: `{str(e)}`
         await self._send_result(ctx, result)
 
 
+class AutoRoles(commands.Cog):
+    def __init__(self, hyena):
+        self.hyena = hyena
+        self.db = self.hyena.main_db
+
+    @property
+    def category(self):
+        return [
+            "Utils",
+            "Conf",
+        ]  # Choose from Utils, Mod, Fun, Conf ## Let it be in a list as we sometimes need to send two of these
+
+    @commands.group(
+        name="autorole",
+        aliases=["autoroles", "ar"],
+        description="Autoroles are roles that are given automatically when a member joins the server. Hyena allows upto 10 autoroles :)",
+        usage="[p]autorole",
+    )
+    async def autorole(self, ctx):
+        if ctx.invoked_subcommand is None:
+            embed = discord.Embed(
+                color=random.choice(self.hyena.colors), timestamp=ctx.message.created_at
+            )
+            embed.set_author(
+                name="Hyena AutoRoles", icon_url=self.hyena.user.avatar.url
+            )
+            embed.description = """
+<:info:846642194052153374> Autoroles are roles that are given automatically when a member joins the server. Hyena allows upto 10 autoroles :)
+
+**Commands:**
+`add [role]` : add a role to the automatically given roles.
+`remove [role]` : remove a role from the automatically given roles.
+`view` : view all the automatically given roles.
+`clear` : clear all the automatically given roles.
+
+**Privacy stuff:**
+Data we store:
+`Guild ID`
+`Roles`
+
+NOTE: All of the data mentioned above will be deleted from our database when you run the `disable` command.
+"""
+            embed.set_footer(
+                text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar.url
+            )
+            embed.set_image(url="https://i.ibb.co/rGQDWQy/image.png")
+
+            await ctx.send(embed=embed)
+
+    @autorole.command(name="add", aliases=["+", "plus"])
+    @commands.cooldown(1, 5, commands.BucketType.user)
+    @commands.has_permissions(manage_guild=True)
+    async def add(self, ctx, role: discord.Role):
+        if role > ctx.guild.me.top_role:
+            return await ctx.send(
+                f"The given role: `{role.name}` is higher or equal to my top role `{ctx.guild.me.top_role.name}`"
+            )
+        if role > ctx.author.top_role:
+            return await ctx.send(
+                f"The given role: `{role.name}` is higher or equal to your top role `{ctx.author.top_role.name}`"
+            )
+
+        result = await self.db.fetch(
+            "SELECT * FROM autoroles WHERE guild_id = $1", ctx.guild.id
+        )
+        if not result:
+            _lst = [role.id]
+            await self.db.execute(
+                "INSERT INTO autoroles(guild_id, roles) VALUES($1, $2)",
+                ctx.guild.id,
+                _lst,
+            )
+            await ctx.send(f"Successfully added the `{role.name}` to the autoroles")
+        if result:
+            _lst = result[0]["roles"]
+            if role.id in _lst:
+                return await ctx.send(
+                    "Role already exists in the automatically given roles"
+                )
+            if len(_lst) >= 10:
+                return await ctx.send("You cannot add more than 10 autoroles")
+            _lst.append(role.id)
+
+            await self.db.execute(
+                "UPDATE autoroles SET roles = $1 WHERE guild_id = $2",
+                _lst,
+                ctx.guild.id,
+            )
+            await ctx.send(f"Successfully added the `{role.name}` to the autoroles")
+
+    @autorole.command(name="remove", aliases=["-", "minus"])
+    @commands.cooldown(1, 5, commands.BucketType.user)
+    @commands.has_permissions(manage_guild=True)
+    async def remove(self, ctx, role: discord.Role):
+        if role > ctx.author.top_role:
+            return await ctx.send(
+                f"The given role: `{role.name}` is higher or equal to your top role `{ctx.author.top_role.name}`"
+            )
+
+        result = await self.db.fetch(
+            "SELECT * FROM autoroles WHERE guild_id = $1", ctx.guild.id
+        )
+        if not result or result[0]["roles"] == []:
+            await ctx.send("You don't have any autoroles :|")
+        if result:
+            _lst = result[0]["roles"]
+            if role.id in _lst:
+                _lst.pop(_lst.index(role.id))
+                await self.db.execute(
+                    "UPDATE autoroles SET roles = $1 WHERE guild_id = $2",
+                    _lst,
+                    ctx.guild.id,
+                )
+                await ctx.send(f"Successfully removed `{role.name}` from the autoroles")
+            else:
+                return await ctx.send(
+                    f"Bruh `{role.name}` is not present in the list of autoroles"
+                )
+
+    @autorole.command(name="view", aliases=["list", "show"])
+    @commands.cooldown(1, 3, commands.BucketType.user)
+    @commands.has_permissions(manage_guild=True)
+    async def view(self, ctx):
+        result = await self.db.fetch(
+            "SELECT * FROM autoroles WHERE guild_id = $1", ctx.guild.id
+        )
+        if not result or result[0]["roles"] == []:
+            return await ctx.send("You don't have any autoroles :|")
+        if result:
+            _lst = [ctx.guild.get_role(x).mention for x in result[0]["roles"]]
+
+            embed = discord.Embed(
+                color=random.choice(self.hyena.colors), timestamp=ctx.message.created_at
+            )
+            embed.set_author(
+                name=f"{ctx.guild.name}'s Autoroles", icon_url=ctx.guild.icon.url
+            )
+            embed.add_field(name="Roles:", value=", ".join(_lst))
+            embed.set_footer(
+                text=f"Requested by {ctx.author}", icon_url=ctx.author.avatar.url
+            )
+            embed.set_image(url=ctx.guild.icon.url)
+
+            await ctx.send(embed=embed)
+
+    @autorole.command(name="clear", aliases=["wipeout", "clearall"])
+    @commands.cooldown(1, 5, commands.BucketType.user)
+    @commands.has_permissions(manage_guild=True)
+    async def clear(self, ctx):
+        result = await self.db.fetch(
+            "SELECT * FROM autoroles WHERE guild_id = $1", ctx.guild.id
+        )
+        if not result or result[0]["roles"] == []:
+            await ctx.send("You don't have any autoroles :|")
+        if result:
+            await self.db.execute(
+                "DELETE FROM autoroles WHERE guild_id = $1", ctx.guild.id
+            )
+            await ctx.send("Successfully cleared all the automatically given roles")
+
+    @commands.Cog.listener()
+    async def on_member_join(self, member):
+        result = await self.db.fetch(
+            "SELECT * FROM autoroles WHERE guild_id = $1", member.guild.id
+        )
+        if not result or result[0]["roles"] == []:
+            return
+
+        _lst = result[0]["roles"]
+        for _id in _lst:
+            role = member.guild.get_role(_id)
+            try:
+                await member.add_roles(role, reason="Hyena Autoroles")
+            except:
+                pass
+
+
 def setup(hyena):
     hyena.add_cog(Utilities(hyena))
+    hyena.add_cog(AutoRoles(hyena))

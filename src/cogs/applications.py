@@ -64,9 +64,7 @@ NOTE: All of the data mentioned above will be deleted from our database when you
         description="Set the channel to send the applications to.",
         usgae="[p]application channel <channel>",
     )
-    @commands.check_any(
-        commands.has_permissions(manage_guild=True), commands.is_owner()
-    )
+    @commands.has_permissions(manage_guild=True)
     async def channel(self, ctx):
         data = await self.db.fetchrow(
             "SELECT * FROM applications WHERE guild_id = $1",
@@ -152,9 +150,7 @@ NOTE: All of the data mentioned above will be deleted from our database when you
     @application.command(
         name="add", description="Add an application", usage="[p]application add <name>"
     )
-    @commands.check_any(
-        commands.has_permissions(manage_guild=True), commands.is_owner()
-    )
+    @commands.has_permissions(manage_guild=True)
     async def add(self, ctx):
         data = await self.db.fetchrow(
             "SELECT * FROM applications WHERE guild_id = $1", ctx.guild.id
@@ -214,9 +210,7 @@ NOTE: All of the data mentioned above will be deleted from our database when you
         description="Remove an application",
         usage="[p]application remove <application>",
     )
-    @commands.check_any(
-        commands.has_permissions(manage_guild=True), commands.is_owner()
-    )
+    @commands.has_permissions(manage_guild=True)
     async def remove(self, ctx, *, name):
         data = await self.db.fetchrow(
             "SELECT * FROM applications WHERE guild_id = $1", ctx.guild.id
@@ -247,9 +241,7 @@ NOTE: All of the data mentioned above will be deleted from our database when you
         description="Disable the application system",
         usage="[p]application disable",
     )
-    @commands.check_any(
-        commands.has_permissions(manage_guild=True), commands.is_owner()
-    )
+    @commands.has_permissions(manage_guild=True)
     async def disable(self, ctx):
         await ctx.send(
             "Are you sure you wanna disable applications? This will Delete all the applications and the questions. Defaults to No"
