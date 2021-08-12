@@ -1,6 +1,8 @@
 import datetime
 import io
 import random
+import re
+import urllib.parse
 
 import aiohttp
 import asyncpg
@@ -16,7 +18,7 @@ class ImageFun(commands.Cog):
 
     @property
     def data(self):
-        return ["Image Fun"]
+        return ["Fun"]
 
     # commands:
 
@@ -211,19 +213,354 @@ class ImageFun(commands.Cog):
 # The text fun commands go below
 
 
-class TextFun(commands.Cog):
-    def __init__(self, hyena, colors):
+class OtherFun(commands.Cog):
+    def __init__(self, hyena):
         self.hyena = hyena
-        self.colors = colors
+        self.no_u = "https://tenor.com/view/no-u-no-no-you-uno-uno-revere-gif-21053426"
 
     @property
-    def data(self):
-        return ["Text Fun"]
+    def category(self):
+        return [
+            "Fun"
+        ]  # Choose from Utils, Mod, Fun, Conf ## Let it be in a list as we sometimes need to send two of thes
 
-    # commands:
+    @commands.command(
+        name="embed",
+        description="Generate an embed.",
+        usage="[p]embed <flags> (--title, --description, --colour/color, --footer)",
+    )
+    @commands.cooldown(1, 10, commands.BucketType.user)
+    async def embed(self, ctx, *, content):
+        message_id_check = re.compile(
+            r"([\d]{15,20}|Hyena Giveaways|Hyena Suggestions)"
+        )
+        match = re.search(message_id_check, content)
+        if match:
+            return await ctx.send(
+                "Your message contains one of the blacklisted words, which may hamper hyena's perfomance."
+            )
+        _flags = ["--title", "--description", "--colour", "--color", "--footer"]
+        found_flags = {}
+        for flag in _flags:
+            found = content.find(flag)
+            if found == -1:
+                continue
+            stripped_content = content[found + 2 :]
+            till = stripped_content.find("--")
+            found_content = ""
+            if till == -1:
+                found_content = content[found:]
+            else:
+                found_content = content[found : till + 1]
+            found_flags[flag] = found_content[len(flag) + 1 :]
+        print(found_flags)
+        if found_flags == {}:
+            return await ctx.send(
+                "You either did not specify any flags or did not specify any valid flags."
+            )
+        color = (
+            found_flags.get("--color")
+            or found_flags.get("--colour")
+            or random.choice(
+                ["#FFED1B", "#F1EFE3", "#00A8FE", "#1FEDF9", "#7CF91F", "#F91F43"]
+            )
+        )
+        print(color)
+        match = re.search(r"^#(?:[0-9a-fA-F]{3}){1,2}$", color)
+        if match:
+            color_splitted = list(str(color))
+            color_splitted[0] = "0x"
+            color = "".join(color_splitted)
+            try:
+                color = int(color, 16)
+            except Exception as e:
+                return await ctx.send(
+                    f"Your hex code `{color}` is not a valid hex code. Example of a valid hex code: `#FFFFFF`, `#000000`"
+                )
+        else:
+            basic_colours = {
+                "blue": 0x0000FF,
+                "pink": 0xFFB6C1,
+                "purple": 0x800080,
+                "green": 0x00FF00,
+                "white": 0xFFFFFF,
+                "black": 0x000000,
+                "grey": 0x797373,
+                "red": 0xFF0000,
+            }
+
+            found = False
+            for basic in basic_colours:
+                if str(color).lower() == basic:
+                    color = basic_colours[basic]
+                    found = True
+
+            if not found:
+                return await ctx.send(
+                    f"Your hex code `{color}` is not a valid hex code. Example of a valid hex code: `#FFFFFF`, `#000000`"
+                )
+        try:
+            embed = discord.Embed()
+            title = found_flags.get("--title")
+            description = found_flags.get("--description")
+            footer = found_flags.get("--footer")
+            if title:
+                embed.title = title
+            if description:
+                embed.description = description
+            if footer:
+                embed.set_footer(text=footer)
+            embed.color = color
+            await ctx.send(embed=embed)
+        except BaseException as e:
+            embed = discord.Embed(
+                title="Uh-oh an error occured with the embed",
+                description=str(e),
+                color=discord.Color.red(),
+            )
+            await ctx.send(embed=embed)
+
+    @commands.command(
+        name="nothing",
+        aliases=["this_command_does_nothing"],
+        usage="[p]nothing",
+        description="Get air LOL",
+    )
+    @commands.cooldown(1, 3, commands.BucketType.user)
+    async def nothing(self, ctx):
+        await ctx.send("<:Air:803100084371062794>")
+
+    @commands.command(
+        name="internet_rules",
+        aliases=["internet_r", "internet-rules"],
+        usage="[p]internet_rules",
+        description="Send some intenet rules to some kids on discord :kek:",
+    )
+    @commands.cooldown(1, 3, commands.BucketType.user)
+    async def internet_rules(self, ctx):
+        if await self.hyena.tools.check_family_friendly(ctx, self.hyena):
+            return
+        await ctx.send(file=discord.File("./assets/text/InternetRules.txt"))
+
+    @commands.command(
+        name="insult",
+        usage="[p]insult [member]",
+        description="Haha insult a member with me :lol:",
+    )
+    @commands.cooldown(1, 3, commands.BucketType.user)
+    async def insult(self, ctx, *, member: discord.Member):
+        if ctx.author.id in self.hyena.owner_ids:
+            return await ctx.send(self.hyena.tools.gen_insult(member))
+
+        elif member.id in self.hyena.owner_ids:
+            await ctx.send(self.no_u)
+            return await ctx.send(self.hyena.tools.gen_insult(ctx.author))
+
+        elif member.guild_permissions.manage_channels:
+            return await ctx.send(
+                f"Sorry i don't want to get banned i cant insult a mod :|"
+            )
+
+        await ctx.send(self.hyena.tools.gen_insult(member))
+
+    @commands.command(
+        usage="[p]kill [member : optional]", description="Kill someone who you hate"
+    )
+    @commands.cooldown(1, 3, commands.BucketType.user)
+    async def kill(self, ctx, *, member: discord.Member = None):
+        if member is None:
+            member = ctx.author
+        if (
+            member.id in self.hyena.owner_ids
+            and not ctx.author.id in self.hyena.owner_ids
+        ):
+            return await ctx.send(self.no_u)
+        responses = [
+            f"{ctx.author.name} punched {member.name} hard on the face and he died :'( press F to pay respect",
+            f"{member.name} died of hunger, F",
+            f"{member.name} was shot by a skeleton",
+            f"{member.name} was blown up by a nuclear bomb",
+            f"{ctx.author.name} pushed {member.name} from a cliff",
+            f"{member.name} stared at discord for 10 hours straight",
+            f"{member.name} died of corona f",
+            f"{member.name} froze to death",
+            f"{member.name} went bald and got insulted to death",
+            f"{ctx.author.name} pushed {member.name} under a truck",
+            f"{ctx.author.name} shot {member.name}",
+            f"{member.name} said no to a Donut",
+            f"{member.name} insulted Div_100 You know What happens next Don't You?",
+        ]
+
+        await ctx.send(random.choice(responses))
 
 
-# ---------------------------- End of Text Fun ---------------------------------
+class TextFun(commands.Cog):
+    def __init__(self, hyena):
+        self.hyena = hyena
+
+    @property
+    def category(self):
+        return [
+            "Fun"
+        ]  # Choose from Utils, Mod, Fun, Conf ## Let it be in a list as we sometimes need to send two of these
+
+    async def get_data(self, question):
+        async with aiohttp.ClientSession() as session:
+            async with session.get(
+                f"https://8ball.delegator.com/magic/JSON/{urllib.parse.quote(question)}"
+            ) as resp:
+                return (await resp.json())["magic"]
+
+    @commands.command(
+        name="8ball",
+        aliases=["eightball", "tf"],
+        usage="[p]8ball [question]",
+        description="Ask a question and get a random answer",
+    )
+    @commands.cooldown(1, 3, commands.BucketType.user)
+    async def ball(self, ctx, *, question):
+        data = await self.get_data(question)
+
+        # Setting up some variables :)
+        type_of_answer = data["type"]
+        answer = data["answer"]
+
+        embed = discord.Embed(timestamp=ctx.message.created_at)
+
+        embed.set_author(name="8ball...", icon_url=ctx.author.avatar.url)
+        if type_of_answer == "Contrary":
+            embed.colour = discord.Colour.red()
+        elif type_of_answer == "Affirmative":
+            embed.colour = discord.Colour.blue()
+        elif type_of_answer == "Neutral":
+            embed.colour = discord.Colour.from_rgb(245, 244, 242)
+
+        embed.add_field(name="Question: ", value=f"{question}", inline=False)
+        embed.add_field(name="Answer: ", value=f"{answer}", inline=False)
+
+        await ctx.reply(embed=embed)
+
+    @commands.command(usage="[p]wide [text]", description="Widen your text")
+    @commands.cooldown(1, 3, commands.BucketType.user)
+    async def wide(self, ctx, *, text):
+        await ctx.reply(" ".join(list(text)))
+
+    @commands.command(
+        usage="[p]pp [member : optional]",
+        description="Measure your or someone else's pp xD",
+    )
+    @commands.cooldown(1, 3, commands.BucketType.user)
+    async def pp(self, ctx, *, member: discord.Member = None):
+        if await self.hyena.tools.check_family_friendly(ctx, self.hyena):
+            return
+        if member is None:
+            member = ctx.author
+
+        if member.id in self.hyena.owner_ids:
+            pp = "8" + ("=" * 15) + "D"
+        else:
+            pp = "8" + "=" * random.randrange(0, 15) + "D"
+
+        await ctx.reply(f"{member.display_name}'s pp: **{pp}**")
+
+    @commands.command(
+        usage="[p]howbald [member : optional]",
+        description="Check your someone's rate, I bet it's 100%",
+    )
+    @commands.cooldown(1, 3, commands.BucketType.user)
+    async def howbald(self, ctx, *, member: discord.Member = None):
+        if not member:
+            member = ctx.author
+        if member.id in self.hyena.owner_ids:
+            percentage = f"**0.69%**"
+        else:
+            percentage = f"**{random.randrange(0, 99)}.69%**"
+
+        await ctx.reply(f"{member.display_name}'s bald rate: {percentage}")
+
+    @commands.command(
+        usage="[p]simprate [member : optional]",
+        description="Check someone's simprate, I bet it's 100.69%",
+    )
+    @commands.cooldown(1, 3, commands.BucketType.user)
+    async def simprate(self, ctx, *, member: discord.Member = None):
+        if not member:
+            member = ctx.author
+        if member.id in self.hyena.owner_ids:
+            percentage = f"**0.69%**"
+        else:
+            percentage = f"**{random.randrange(0, 99)}.69%**"
+
+        await ctx.reply(f"{member.display_name}'s simp rate: {percentage}")
+
+    @commands.command(usage="[p]say [msg]", description="Say a specific message")
+    @commands.cooldown(1, 3, commands.BucketType.user)
+    async def say(self, ctx, *, msg):
+        await ctx.send("{}".format(msg))
+        await ctx.message.delete()
+
+    @commands.command(
+        usage="[p]reply [msg to reply's ID : optional] [msg]",
+        description="Reply to a specific message. You can either provide the message ID or directly reply to the message.",
+        aliases=["rep"],
+    )
+    @commands.cooldown(1, 3, commands.BucketType.user)
+    async def reply(self, ctx, _msg_id, *, message: str = None):
+        _type = None
+        if message is None:
+            message = _msg_id
+            _msg_id = ""
+        try:
+            _msg_id = int(_msg_id)
+            _type = "id"
+        except ValueError:
+            message = f"{_msg_id} {message}"
+            _type = "refered"
+
+        msg = None
+
+        if _type == "id":
+            try:
+                msg = await ctx.channel.fetch_message(_msg_id)
+            except discord.errors.NotFound:
+                _type = "refered"
+                message = f"{_msg_id} {message}"
+        if _type == "refered":
+            try:
+                msg = await ctx.channel.fetch_message(ctx.message.reference.message_id)
+            except AttributeError:
+                pass
+
+        if msg is None:
+            return await ctx.send(
+                "Can't find your referenced message, you can either directly reply to the message or you can send the ID in this format: `[p]reply [msg to reply's ID : optional] [msg]`"
+            )
+
+        try:
+            await ctx.message.delete()
+        except:
+            pass
+        return await msg.reply(message)
+
+    @commands.command(
+        name="reverse",
+        aliases=["backwards", "back"],
+        usage="[p]reverse [text]",
+        description="Reverse your text",
+    )
+    @commands.cooldown(1, 3, commands.BucketType.user)
+    async def reverse(self, ctx, *, message):
+        await ctx.reply(message[::-1])
+
+    @commands.command(
+        name="widecaps",
+        aliases=["widecap"],
+        usage="[p]widecaps [text]",
+        description="make your text go caps and wide LOL",
+    )
+    @commands.cooldown(1, 3, commands.BucketType.user)
+    async def widecaps(self, ctx, *, text=None):
+        await ctx.reply(" ".join([x for x in text.upper()]))
 
 
 class Starboard(commands.Cog):
@@ -275,9 +612,7 @@ class Starboard(commands.Cog):
             await ctx.send(embed=embed)
 
     @starboard.command(name="channel", aliases=["ch", "c"])
-    @commands.check_any(
-        commands.has_permissions(manage_guild=True), commands.is_owner()
-    )
+    @commands.has_permissions(manage_guild=True)
     @commands.cooldown(1, 3, commands.BucketType.user)
     async def channel(self, ctx, channel: discord.TextChannel):
         result = await self.db.fetch(
@@ -299,9 +634,7 @@ class Starboard(commands.Cog):
         await ctx.send(f"Successfully set starboard channel to {channel.mention}")
 
     @starboard.command(name="star_limit", aliases=["limit", "starlimit"])
-    @commands.check_any(
-        commands.has_permissions(manage_guild=True), commands.is_owner()
-    )
+    @commands.has_permissions(manage_guild=True)
     @commands.cooldown(1, 3, commands.BucketType.user)
     async def star_limit(self, ctx, limit: str):
         try:
@@ -329,9 +662,7 @@ class Starboard(commands.Cog):
         await ctx.send(f"Successfully set star limit to {limit}")
 
     @starboard.command(name="disable", aliases=["delete", "remove"])
-    @commands.check_any(
-        commands.has_permissions(manage_guild=True), commands.is_owner()
-    )
+    @commands.has_permissions(manage_guild=True)
     @commands.cooldown(1, 3, commands.BucketType.user)
     async def disable(self, ctx):
         result = await self.db.fetch(
@@ -538,6 +869,7 @@ class Starboard(commands.Cog):
 
 
 def setup(hyena):
-    hyena.add_cog(TextFun(hyena, hyena.colors))
+    hyena.add_cog(OtherFun(hyena))
+    hyena.add_cog(TextFun(hyena))
     hyena.add_cog(ImageFun(hyena, hyena.colors))
     hyena.add_cog(Starboard(hyena))

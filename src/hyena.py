@@ -263,6 +263,18 @@ After 5 seconds hyena will default to normal boot
             ("moderation", "mod"): "moderation",
             ("utils", "utilities", "util"): "utils",
             ("serverconf", "conf", "server"): "serverconf",
+            ("fun", "fun-cmds"): "fun",
+            ("apps", "applications", "app", "applications"): "applications",
+            ("dev", "developer", "development"): "dev",
+            ("prefix", "prefixes", "pre"): "prefix",
+            ("tickets", "ticket"): "tickets",
+            (
+                "goodbye-welcome",
+                "leave-join",
+                "welcome",
+                "goodbye",
+                "welcome-goodbye",
+            ): "welcome-goodbye",
         }
 
         for alias, cog in aliases.items():
