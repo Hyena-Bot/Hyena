@@ -3,6 +3,7 @@ import re
 import time
 
 import aiohttp
+import discord
 
 
 async def ping_db(hyena, ctx):
@@ -94,3 +95,25 @@ async def check_family_friendly(ctx, hyena):
     if res:
         return res[0]["family_friendly"]
     return False
+
+
+def gen_insult(member: discord.Member):
+    insults = [
+        f"{member.name} You're as useless as `ueue` in `queue`",
+        f"{member.name} Mirrors can't talk, lucky for you they cant laugh either",
+        f"{member.name} You're the reason a gene pool needs a life guard",
+        f"{member.name} You know, you are a classic example of the inverse ratio between the size of the mouth and the size of the brain.",
+        f"{member.name} I am afraid to tell you that you are a pillock.",
+        f"{member.name} Dumb..",
+        f"{member.name} If i had a face like your's, i will sue you",
+        f"{member.name} Someday you'll go far and i hope || you stay there dum. ||",
+        f"{member.name} Aha! I see the dumb fairy has visited us again!",
+        f"{member.name} If laughter is the best medicine, your face must be curing the world.",
+        f"{member.name} I'd agree with you but then we'd both be wrong :|",
+        f"{member.name} When you were born, doctor threw you out of the window and the window threw you back..",
+        f"{member.name} When I see your face, there's not a thing that would change except the direction i am moving in",
+        f'{member.name} Forgot Using "Div" in HTML',
+        f"The Society hates {member.name} for not liking donuts... SHAME",
+    ]
+
+    return random.choice(insults)
