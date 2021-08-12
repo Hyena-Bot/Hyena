@@ -59,4 +59,3 @@ async def log(db, hyena, data, ctx):
             data["user_id"],
             ctx.guild.id,
         )
-    print("Donut")

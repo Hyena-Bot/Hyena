@@ -96,7 +96,7 @@ Note: Running the disable command will delete all the above data from our databa
             return await ctx.send("Alright i will not disable welcome messages")
 
     @welcome.command(name="test")
-    @commands.has_permissions
+    @commands.has_permissions(manage_messages=True)
     async def test(self, ctx, member: discord.Member = None):
         member = member or ctx.author
         cog = self.hyena.get_cog("Handlers")
