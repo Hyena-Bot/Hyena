@@ -72,9 +72,7 @@ Note: Running the disable command will delete all the above data from our databa
         pass
 
     @welcome.command(name="disable")
-    @commands.check_any(
-        commands.has_permissions(manage_guild=True), commands.is_owner()
-    )
+    @commands.has_permissions(manage_guild=True)
     async def disable(self, ctx):
         await ctx.send(
             "Are you sure you want to disable welcome messages? This WILL delete everything you have configured for them."
@@ -98,18 +96,14 @@ Note: Running the disable command will delete all the above data from our databa
             return await ctx.send("Alright i will not disable welcome messages")
 
     @welcome.command(name="test")
-    @commands.check_any(
-        commands.has_permissions(manage_messages=True), commands.is_owner()
-    )
+    @commands.has_permissions
     async def test(self, ctx, member: discord.Member = None):
         member = member or ctx.author
         cog = self.hyena.get_cog("Handlers")
         await cog.on_member_join(member)
 
     @welcome.command(name="message")
-    @commands.check_any(
-        commands.has_permissions(manage_messages=True), commands.is_owner()
-    )
+    @commands.has_permissions(manage_guild=True)
     async def message(self, ctx, *, message):
         data = await self.db.fetchrow(
             "SELECT * FROM hyena_welcome WHERE guild_id = $1", ctx.guild.id
@@ -123,9 +117,7 @@ Note: Running the disable command will delete all the above data from our databa
         await self.db.execute(sql, *val)
 
     @welcome.command(name="channel")
-    @commands.check_any(
-        commands.has_permissions(manage_guild=True), commands.is_owner()
-    )
+    @commands.has_permissions(manage_guild=True)
     async def welcome_channel(self, ctx, channel: discord.TextChannel):
         data = await self.db.fetchrow(
             "SELECT * FROM hyena_welcome WHERE guild_id = $1", ctx.guild.id
@@ -141,9 +133,7 @@ Note: Running the disable command will delete all the above data from our databa
         await self.db.execute(sql, *val)
 
     @embed.command(name="title")
-    @commands.check_any(
-        commands.has_permissions(manage_guild=True), commands.is_owner()
-    )
+    @commands.has_permissions(manage_guild=True)
     async def welcome_title(self, ctx, *, title):
         data = await self.db.fetchrow(
             "SELECT * FROM hyena_welcome WHERE guild_id = $1", ctx.guild.id
@@ -158,9 +148,7 @@ Note: Running the disable command will delete all the above data from our databa
         await ctx.send(f"Set the welcome embed title to {title}")
 
     @embed.command(name="description")
-    @commands.check_any(
-        commands.has_permissions(manage_guild=True), commands.is_owner()
-    )
+    @commands.has_permissions(manage_guild=True)
     async def welcome_description(self, ctx, *, description):
         data = await self.db.fetchrow(
             "SELECT * FROM hyena_welcome WHERE guild_id = $1", ctx.guild.id
@@ -175,9 +163,7 @@ Note: Running the disable command will delete all the above data from our databa
         await ctx.send(f"Set the welcome embed description to {description}")
 
     @embed.command(name="thumbnail")
-    @commands.check_any(
-        commands.has_permissions(manage_guild=True), commands.is_owner()
-    )
+    @commands.has_permissions(manage_guild=True)
     async def welcome_thumbnail(self, ctx, *, thumbnail):
         data = await self.db.fetchrow(
             "SELECT * FROM hyena_welcome WHERE guild_id = $1", ctx.guild.id
@@ -195,9 +181,7 @@ Note: Running the disable command will delete all the above data from our databa
         await ctx.send(f"Set the welcome embed thumbnail to {thumbnail}")
 
     @embed.command(name="footer")
-    @commands.check_any(
-        commands.has_permissions(manage_guild=True), commands.is_owner()
-    )
+    @commands.has_permissions(manage_guild=True)
     async def welcome_footer(self, ctx, *, footer):
         data = await self.db.fetchrow(
             "SELECT * FROM hyena_welcome WHERE guild_id = $1", ctx.guild.id
@@ -212,9 +196,7 @@ Note: Running the disable command will delete all the above data from our databa
         await ctx.send(f"Set the welcome embed footer to {footer}")
 
     @embed.command(name="disable")
-    @commands.check_any(
-        commands.has_permissions(manage_guild=True), commands.is_owner()
-    )
+    @commands.has_permissions(manage_guild=True)
     async def welcome_embed_disable(self, ctx):
         data = await self.db.fetchrow(
             "SELECT * FROM hyena_welcome WHERE guild_id = $1", ctx.guild.id
@@ -236,9 +218,7 @@ Note: Running the disable command will delete all the above data from our databa
         await ctx.send(f"Successfully disabled the embeds.")
 
     @embed.command(name="enable")
-    @commands.check_any(
-        commands.has_permissions(manage_guild=True), commands.is_owner()
-    )
+    @commands.has_permissions(manage_guild=True)
     async def welcome_enble(self, ctx):
         data = await self.db.fetchrow(
             "SELECT * FROM hyena_welcome WHERE guild_id = $1", ctx.guild.id
@@ -303,9 +283,7 @@ Note: Running the disable command will delete all the above data from our databa
         pass
 
     @goodbye.command(name="disable")
-    @commands.check_any(
-        commands.has_permissions(manage_guild=True), commands.is_owner()
-    )
+    @commands.has_permissions(manage_guild=True)
     async def gb_disable(self, ctx):
         await ctx.send(
             "Are you sure you want to disable goodbye messages? This WILL delete everything you have configured for them."
@@ -329,18 +307,14 @@ Note: Running the disable command will delete all the above data from our databa
             return await ctx.send("Alright i will not disable goodbye messages")
 
     @goodbye.command(name="test")
-    @commands.check_any(
-        commands.has_permissions(manage_messages=True), commands.is_owner()
-    )
+    @commands.has_permissions(manage_messages=True)
     async def gb_test(self, ctx, member: discord.Member = None):
         member = member or ctx.author
         cog = self.hyena.get_cog("Handlers")
         await cog.on_member_remove(member)
 
     @goodbye.command(name="message")
-    @commands.check_any(
-        commands.has_permissions(manage_messages=True), commands.is_owner()
-    )
+    @commands.has_permissions(manage_guild=True)
     async def gb_message(self, ctx, *, message):
         data = await self.db.fetchrow(
             "SELECT * FROM hyena_goodbye WHERE guild_id = $1", ctx.guild.id
@@ -354,9 +328,7 @@ Note: Running the disable command will delete all the above data from our databa
         await self.db.execute(sql, *val)
 
     @goodbye.command(name="channel")
-    @commands.check_any(
-        commands.has_permissions(manage_guild=True), commands.is_owner()
-    )
+    @commands.has_permissions(manage_guild=True)
     async def goodbye_channel(self, ctx, channel: discord.TextChannel):
         data = await self.db.fetchrow(
             "SELECT * FROM hyena_goodbye WHERE guild_id = $1", ctx.guild.id
@@ -372,9 +344,7 @@ Note: Running the disable command will delete all the above data from our databa
         await self.db.execute(sql, *val)
 
     @gb_embed.command(name="title")
-    @commands.check_any(
-        commands.has_permissions(manage_guild=True), commands.is_owner()
-    )
+    @commands.has_permissions(manage_guild=True)
     async def goodbye_title(self, ctx, *, title):
         data = await self.db.fetchrow(
             "SELECT * FROM hyena_goodbye WHERE guild_id = $1", ctx.guild.id
@@ -389,9 +359,7 @@ Note: Running the disable command will delete all the above data from our databa
         await ctx.send(f"Set the goodbye embed title to {title}")
 
     @gb_embed.command(name="description")
-    @commands.check_any(
-        commands.has_permissions(manage_guild=True), commands.is_owner()
-    )
+    @commands.has_permissions(manage_guild=True)
     async def goodbye_description(self, ctx, *, description):
         data = await self.db.fetchrow(
             "SELECT * FROM hyena_goodbye WHERE guild_id = $1", ctx.guild.id
@@ -406,9 +374,7 @@ Note: Running the disable command will delete all the above data from our databa
         await ctx.send(f"Set the goodbye embed description to {description}")
 
     @gb_embed.command(name="thumbnail")
-    @commands.check_any(
-        commands.has_permissions(manage_guild=True), commands.is_owner()
-    )
+    @commands.has_permissions(manage_guild=True)
     async def goodbye_thumbnail(self, ctx, *, thumbnail):
         data = await self.db.fetchrow(
             "SELECT * FROM hyena_goodbye WHERE guild_id = $1", ctx.guild.id
@@ -426,9 +392,7 @@ Note: Running the disable command will delete all the above data from our databa
         await ctx.send(f"Set the goodbye embed thumbnail to {thumbnail}")
 
     @gb_embed.command(name="footer")
-    @commands.check_any(
-        commands.has_permissions(manage_guild=True), commands.is_owner()
-    )
+    @commands.has_permissions(manage_guild=True)
     async def goodbye_footer(self, ctx, *, footer):
         data = await self.db.fetchrow(
             "SELECT * FROM hyena_goodbye WHERE guild_id = $1", ctx.guild.id
@@ -443,9 +407,7 @@ Note: Running the disable command will delete all the above data from our databa
         await ctx.send(f"Set the goodbye embed footer to {footer}")
 
     @gb_embed.command(name="disable")
-    @commands.check_any(
-        commands.has_permissions(manage_guild=True), commands.is_owner()
-    )
+    @commands.has_permissions(manage_guild=True)
     async def goodbye_embed_disable(self, ctx):
         data = await self.db.fetchrow(
             "SELECT * FROM hyena_goodbye WHERE guild_id = $1", ctx.guild.id
@@ -467,9 +429,7 @@ Note: Running the disable command will delete all the above data from our databa
         await ctx.send(f"Successfully disabled the embeds.")
 
     @gb_embed.command(name="enable")
-    @commands.check_any(
-        commands.has_permissions(manage_guild=True), commands.is_owner()
-    )
+    @commands.has_permissions(manage_guild=True)
     async def goodbye_enble(self, ctx):
         data = await self.db.fetchrow(
             "SELECT * FROM hyena_goodbye WHERE guild_id = $1", ctx.guild.id

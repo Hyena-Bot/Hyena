@@ -128,9 +128,7 @@ Hyena will automatically delete the message if any check is triggered.
 
     @automod.command(name="spam", aliases=["spam-filter", "spam-protection"])
     @commands.cooldown(1, 3, commands.BucketType.user)
-    @commands.check_any(
-        commands.has_permissions(manage_guild=True), commands.is_owner()
-    )
+    @commands.has_permissions(manage_guild=True)
     async def spam(self, ctx, enable_or_disable):
         if enable_or_disable.lower() not in ["enable", "disable"]:
             return await ctx.send("Wtf are you thinking choose enable or disable")
@@ -152,9 +150,7 @@ Hyena will automatically delete the message if any check is triggered.
         aliases=["banned-words", "swear-words", "words", "profanity"],
     )
     @commands.cooldown(1, 3, commands.BucketType.user)
-    @commands.check_any(
-        commands.has_permissions(manage_guild=True), commands.is_owner()
-    )
+    @commands.has_permissions(manage_guild=True)
     async def word(self, ctx, enable_or_disable):
         if enable_or_disable.lower() not in ["enable", "disable"]:
             return await ctx.send("Wtf are you thinking choose enable or disable")
@@ -177,9 +173,7 @@ Hyena will automatically delete the message if any check is triggered.
         name="invite_links", aliases=["invites", "invite-links", "invite-filter"]
     )
     @commands.cooldown(1, 3, commands.BucketType.user)
-    @commands.check_any(
-        commands.has_permissions(manage_guild=True), commands.is_owner()
-    )
+    @commands.has_permissions(manage_guild=True)
     async def invite_links(self, ctx, enable_or_disable: str):
         if enable_or_disable.lower() not in ["enable", "disable"]:
             return await ctx.send("Wtf are you thinking choose enable or disable")
@@ -198,9 +192,7 @@ Hyena will automatically delete the message if any check is triggered.
 
     @automod.command(name="caps-lock", aliases=["capitals", "caps"])
     @commands.cooldown(1, 3, commands.BucketType.user)
-    @commands.check_any(
-        commands.has_permissions(manage_guild=True), commands.is_owner()
-    )
+    @commands.has_permissions(manage_guild=True)
     async def caps(self, ctx, enable_or_disable: str):
         if enable_or_disable.lower() not in ["enable", "disable"]:
             return await ctx.send("Wtf are you thinking choose enable or disable")
@@ -221,9 +213,7 @@ Hyena will automatically delete the message if any check is triggered.
         name="links", aliases=["all-links", "url-filter", "link-filter", "urls", "url"]
     )
     @commands.cooldown(1, 3, commands.BucketType.user)
-    @commands.check_any(
-        commands.has_permissions(manage_guild=True), commands.is_owner()
-    )
+    @commands.has_permissions(manage_guild=True)
     async def all_links(self, ctx, enable_or_disable: str):
         if enable_or_disable.lower() not in ["enable", "disable"]:
             return await ctx.send("Wtf are you thinking choose enable or disable")
@@ -242,9 +232,7 @@ Hyena will automatically delete the message if any check is triggered.
 
     @automod.command(name="nsfw_filter", aliases=["nsfw", "nsfw-filter"])
     @commands.cooldown(1, 3, commands.BucketType.user)
-    @commands.check_any(
-        commands.has_permissions(manage_guild=True), commands.is_owner()
-    )
+    @commands.has_permissions(manage_guild=True)
     async def nsfw_filter(self, ctx, enable_or_disable):
         if enable_or_disable.lower() not in ["enable", "disable"]:
             return await ctx.send("Wtf are you thinking choose enable or disable")
@@ -263,9 +251,7 @@ Hyena will automatically delete the message if any check is triggered.
 
     @automod.command(name="mentions", aliases=["mention", "mass-mentions"])
     @commands.cooldown(1, 3, commands.BucketType.user)
-    @commands.check_any(
-        commands.has_permissions(manage_guild=True), commands.is_owner()
-    )
+    @commands.has_permissions(manage_guild=True)
     async def mentions(self, ctx, enable_or_disable):
         if enable_or_disable.lower() not in ["enable", "disable"]:
             return await ctx.send("Wtf are you thinking choose enable or disable")
@@ -288,9 +274,7 @@ Hyena will automatically delete the message if any check is triggered.
         name="caps-limit", aliases=["cap-limit", "capital-limit", "caps_limit"]
     )
     @commands.cooldown(1, 3, commands.BucketType.user)
-    @commands.check_any(
-        commands.has_permissions(manage_guild=True), commands.is_owner()
-    )
+    @commands.has_permissions(manage_guild=True)
     async def caps_limit(self, ctx, limit: str):
         limit = limit.replace("%", "")
         try:
@@ -324,9 +308,7 @@ Hyena will automatically delete the message if any check is triggered.
 
     @automod.command(name="spam-limit", aliases=["spam_limit"])
     @commands.cooldown(1, 3, commands.BucketType.user)
-    @commands.check_any(
-        commands.has_permissions(manage_guild=True), commands.is_owner()
-    )
+    @commands.has_permissions(manage_guild=True)
     async def spam_limit(self, ctx, limit):
         try:
             limit = int(limit)
@@ -359,9 +341,7 @@ Hyena will automatically delete the message if any check is triggered.
 
     @automod.command(name="mention-limit", aliases=["mention_limit"])
     @commands.cooldown(1, 3, commands.BucketType.user)
-    @commands.check_any(
-        commands.has_permissions(manage_guild=True), commands.is_owner()
-    )
+    @commands.has_permissions(manage_guild=True)
     async def mention_limit(self, ctx, limit):
         try:
             limit = int(limit)
@@ -393,9 +373,7 @@ Hyena will automatically delete the message if any check is triggered.
 
     @automod.command(name="ignore", aliases=["ignore_channel"])
     @commands.cooldown(1, 3, commands.BucketType.user)
-    @commands.check_any(
-        commands.has_permissions(manage_channels=True), commands.is_owner()
-    )
+    @commands.has_permissions(manage_channels=True)
     async def ignore(self, ctx, channel: discord.TextChannel):
         res = await self.db.fetch(
             "SELECT ignored_channels FROM config WHERE guild_id = $1", ctx.guild.id
@@ -429,9 +407,7 @@ Hyena will automatically delete the message if any check is triggered.
 
     @automod.command(name="ignore_remove", aliases=["ignore-disable", "ignore-remove"])
     @commands.cooldown(1, 3, commands.BucketType.user)
-    @commands.check_any(
-        commands.has_permissions(manage_channels=True), commands.is_owner()
-    )
+    @commands.has_permissions(manage_channels=True)
     async def ignore_remove(self, ctx, channel: discord.TextChannel):
         res = await self.db.fetch(
             "SELECT ignored_channels FROM config WHERE guild_id = $1", ctx.guild.id
@@ -453,9 +429,7 @@ Hyena will automatically delete the message if any check is triggered.
             await ctx.send(f"{channel.mention} has been removed from ignored channels!")
 
     @automod.command(name="blacklist", aliases=["blacklists"])
-    @commands.check_any(
-        commands.has_permissions(manage_guild=True), commands.is_owner()
-    )
+    @commands.has_permissions(manage_guild=True)
     async def blacklist(self, ctx, *, word: str):
         if len(word) >= 70:
             return await ctx.send("Add a sensible word you dumb :|")
@@ -500,9 +474,7 @@ Hyena will automatically delete the message if any check is triggered.
 
     @automod.command(name="whitelist", aliases=["whitlist", "blacklist-remove"])
     @commands.cooldown(1, 3, commands.BucketType.user)
-    @commands.check_any(
-        commands.has_permissions(manage_guild=True), commands.is_owner()
-    )
+    @commands.has_permissions(manage_guild=True)
     async def whitelist(self, ctx, *, word: str):
         res = await self.db.fetch(
             "SELECT blacklisted FROM config WHERE guild_id = $1", ctx.guild.id
@@ -534,9 +506,7 @@ Hyena will automatically delete the message if any check is triggered.
             "show-blacklist",
         ],
     )
-    @commands.check_any(
-        commands.has_permissions(manage_guild=True), commands.is_owner()
-    )
+    @commands.has_permissions(manage_guild=True)
     async def show_blacklists(self, ctx):
         res = await self.db.fetch(
             "SELECT blacklisted FROM config WHERE guild_id = $1", ctx.guild.id
