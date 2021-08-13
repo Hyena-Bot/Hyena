@@ -59,9 +59,7 @@ NOTE: All of the data mentioned above will be deleted from our database when you
             await ctx.send(embed=embed)
 
     @suggestions.command(name="channel")
-    @commands.check_any(
-        commands.has_permissions(manage_guild=True), commands.is_owner()
-    )
+    @commands.has_permissions(manage_channels=True)
     async def channel(self, ctx, channel: discord.TextChannel):
         data = await self.db.fetchrow(
             "SELECT * FROM suggestion WHERE guild_id = $1", ctx.guild.id
@@ -78,9 +76,7 @@ NOTE: All of the data mentioned above will be deleted from our database when you
         await self.db.execute(sql, *val)
 
     @suggestions.command(name="react")
-    @commands.check_any(
-        commands.has_permissions(manage_guild=True), commands.is_owner()
-    )
+    @commands.has_permissions(manage_channels=True)
     async def react(self, ctx, *, option):
         yes_options = ["yes", "ye", "yah", "pls", "hyena", "ok", "enable", "on"]
         if option.lower() in yes_options:
@@ -100,9 +96,7 @@ NOTE: All of the data mentioned above will be deleted from our database when you
         await ctx.send(f"Reaction state has been set to `{option.title()}`.")
 
     @suggestions.command(name="disable")
-    @commands.check_any(
-        commands.has_permissions(manage_guild=True), commands.is_owner()
-    )
+    @commands.has_permissions(manage_channels=True)
     async def disable(self, ctx):
         await self.db.execute(
             "DELETE FROM suggestion WHERE guild_id = $1", (ctx.guild.id)
@@ -143,9 +137,7 @@ NOTE: All of the data mentioned above will be deleted from our database when you
         await self.suggest(ctx, suggestion=suggestion)
 
     @suggestions.command(name="decline", aliases=["deny"])
-    @commands.check_any(
-        commands.has_permissions(manage_messages=True), commands.is_owner()
-    )
+    @commands.has_permissions(manage_messages=True)
     async def decline(self, ctx, *, reason="None."):
         if ctx.message.reference is None:
             return await ctx.send("You need to reply to the suggestion you wanna deny.")
@@ -170,14 +162,11 @@ NOTE: All of the data mentioned above will be deleted from our database when you
             return
 
     @suggestions.command(name="accept")
-    @commands.check_any(
-        commands.has_permissions(manage_messages=True), commands.is_owner()
-    )
+    @commands.has_permissions(manage_messages=True)
     async def accept(self, ctx, *, reason="None."):
         if ctx.message.reference is None:
             return await ctx.send(
-                "You need to reply to the suggestion you wanna accept."
-            )
+                "You need to reply to the suggestion you wanna accept."            )
         message_id = ctx.message.reference.message_id
         message = await ctx.channel.fetch_message(message_id)
         if message.author.id != self.hyena.user.id:
@@ -199,9 +188,7 @@ NOTE: All of the data mentioned above will be deleted from our database when you
             return
 
     @suggestions.command(name="consider", aliases=["considered"])
-    @commands.check_any(
-        commands.has_permissions(manage_messages=True), commands.is_owner()
-    )
+    @commands.has_permissions(manage_messages=True)
     async def consider(self, ctx, *, reason="None."):
         if ctx.message.reference is None:
             return await ctx.send(
@@ -228,9 +215,7 @@ NOTE: All of the data mentioned above will be deleted from our database when you
             return
 
     @suggestions.command(name="never", aliases=["never-happening"])
-    @commands.check_any(
-        commands.has_permissions(manage_messages=True), commands.is_owner()
-    )
+    @commands.has_permissions(manage_messages=True)
     async def never(self, ctx, *, reason="None."):
         if ctx.message.reference is None:
             return await ctx.send(
@@ -257,9 +242,7 @@ NOTE: All of the data mentioned above will be deleted from our database when you
             return
 
     @suggestions.command(name="implement")
-    @commands.check_any(
-        commands.has_permissions(manage_messages=True), commands.is_owner()
-    )
+    @commands.has_permissions(manage_messages=True)
     async def implement(self, ctx, *, reason="None."):
         if ctx.message.reference is None:
             return await ctx.send(
