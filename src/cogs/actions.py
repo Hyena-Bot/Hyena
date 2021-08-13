@@ -83,7 +83,6 @@ class ModActions(commands.Cog):
 
     @commands.command(name="clear-actions", alises=["clear_actions"])
     @commands.has_permissions(manage_roles=True)
-
     async def clear_actions(self, ctx, member: discord.Member):
         await self.db.execute(
             "DELETE FROM moderation_actions WHERE user_id = $1 AND guild_id = $2",
@@ -94,6 +93,7 @@ class ModActions(commands.Cog):
         await ctx.send(
             f"Cleared all moderationm action LOGS for {member}. \n**Note: For stuff like warns it will not clear the actual warns, just the logs.**"
         )
+
 
 def setup(hyena):
     hyena.add_cog(ModActions(hyena, hyena.colors))
