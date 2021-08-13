@@ -580,7 +580,9 @@ Python Version: {os.popen("python3 --version").read()}
         )
         embed.set_author(name="Hyena Invites", icon_url=self.hyena.user.avatar.url)
         embed.description = f"""
-**Bot invite:** [click here!](https://invite.hyenabot.xyz/)**                                                                                   **
+**Bot invite:** [click here!](https://invite.hyenabot.xyz/)** 
+**TOP.GG:** [click here!](https://top.gg/bot/790892810243932160/)
+**Upvote on TOP.GG:** [click here!](https://top.gg/bot/790892810243932160/vote)                                                                                   **
 **Support server:** [click here!](https://support.hyenabot.xyz/)
 **Website:** [click here!](https://hyenabot.xyz/)
 **API:** [click here!](https://api.hyenabot.xyz/)
