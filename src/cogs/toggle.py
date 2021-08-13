@@ -9,7 +9,7 @@ class Toggle(commands.Cog):
         self.hyena = hyena
         self.colors = hyena.colors
         self.db = hyena.toggle_db
-    
+
     @property
     def catefory(self):
         return ["Mod", "Utils"]

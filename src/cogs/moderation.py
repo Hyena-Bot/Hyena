@@ -13,7 +13,7 @@ class Moderation(commands.Cog):
     def __init__(self, hyena):
         self.hyena = hyena
         self.logging = self.hyena.action_logs_pkg.CommandLogs(self.hyena)
-    
+
     @property
     def category(self):
         return ["Mod"]
