@@ -519,7 +519,7 @@ Python Version: {os.popen("python3 --version").read()}
         description="Set the slow mode delay for a specific channel",
     )
     @commands.cooldown(1, 3, commands.BucketType.user)
-    @commands.has_permissions(manage_channeks=True)
+    @commands.has_permissions(manage_channels=True)
     @commands.bot_has_permissions(manage_channels=True)
     async def slowmode(self, ctx, time: str, channel: discord.TextChannel = None):
         if channel == None:

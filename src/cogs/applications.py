@@ -28,7 +28,9 @@ class Applications(commands.Cog):
     async def application(self, ctx):
         if ctx.invoked_subcommand is None:
             embed = discord.Embed(color=random.choice(self.hyena.colors))
-            embed.set_author(name="Hyena Chatbot", icon_url=self.hyena.user.avatar.url)
+            embed.set_author(
+                name="Hyena Applications", icon_url=self.hyena.user.avatar.url
+            )
             embed.description = """
 <:info:846642194052153374> Setup an awesome application system, Right on discord without having to go to a third party website or using any pay to wain bot which locks most features to audience which pays.
 
