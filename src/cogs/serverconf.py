@@ -9,6 +9,10 @@ class ServerConfig(commands.Cog):
         self.hyena = hyena
         self.db = self.hyena.main_db2
 
+    @property
+    def category(self):
+        return ["Conf", "Utils"]
+
     @commands.group(
         name="serverconf",
         aliases=["serverconfig", "config", "conf", "server-config"],

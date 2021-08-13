@@ -14,6 +14,10 @@ class Moderation(commands.Cog):
         self.hyena = hyena
         self.logging = self.hyena.action_logs_pkg.CommandLogs(self.hyena)
 
+    @property
+    def category(self):
+        return ["Mod"]
+
     @commands.command(
         name="ban",
         usage="[p]ban [member] [delete_days] [reason : optional]",
