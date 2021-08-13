@@ -73,6 +73,53 @@ async def code(ctx, hyena): \n"""
         await ctx.send("Sorry, this is a Developer only command!")
 
 
+@hyena.check
+async def toggle(ctx):
+    db = hyena.toggle_db
+    _commands = await db.fetchrow(
+        "SELECT * FROM commands WHERE guild_id = $1", ctx.guild.id
+    ) or [None]
+    channel = await db.fetchrow(
+        "SELECT * FROM channel WHERE guild_id = $1", ctx.guild.id
+    ) or [None]
+    users = await db.fetchrow(
+        "SELECT * FROM users WHERE guild_id = $1", ctx.guild.id
+    ) or [None]
+    config = await db.fetchrow(
+        "SELECT * FROM config WHERE guild_id = $1", ctx.guild.id
+    ) or [ctx.guild.id, "disabled"]
+    message = True if config[1] == "enabled" else False
+    if list(_commands) in [[None], [ctx.guild.id, []]]:
+        _commands = [ctx.guild.id, [None]]
+
+    if list(channel) in [[None], [ctx.guild.id, []]]:
+        channel = [ctx.guild.id, [None]]
+
+    if list(users) in [[None], [ctx.guild.id, []]]:
+        users = [ctx.guild.id, [None]]
+
+    if ctx.channel.id in channel[1]:
+        if message:
+            await ctx.send(f"Uh, Oh! It seems like this channel is blacklisted.")
+        return False
+
+    if ctx.author.id in users[1]:
+        if message:
+            await ctx.send(
+                f"Uh, Oh! It seems like you are blackisted to use any commands in this server."
+            )
+        return False
+
+    if ctx.command.name.lower() in _commands[1]:
+        if message:
+            await ctx.send(
+                f"Uh, Oh! It seems like the `{ctx.command.name}` command is disabled for this server."
+            )
+        return False
+
+    return True
+
+
 if __name__ == "__main__":
     hyena.loop.run_until_complete(hyena.connect_database())
     hyena.run()

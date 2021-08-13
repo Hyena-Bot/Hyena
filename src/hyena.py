@@ -147,6 +147,12 @@ After 5 seconds hyena will default to normal boot
             password=self.secrets["POSTGRES"],
             host="localhost",
         )
+        self.toggle_db = await asyncpg.create_pool(
+            database="hyena_toggle",
+            user="postgres",
+            password=self.secrets["POSTGRES"],
+            host="localhost",
+        )
 
     def get_hyena_version(self):
         with open("./assets/version.txt", "r") as f:

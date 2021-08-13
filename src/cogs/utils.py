@@ -319,10 +319,13 @@ Connect Bot by UnsoughtConch#9225 - [Invite Now](https://bit.ly/3iUa63Q)
             name=f"Shard ({shard.id})",
             value=self.format_latency(shard.latency * 1000) + " ms",
         )
-        embed.add_field(
-            name="Website Response",
-            value=os.popen("ping hyenabot.xyz -c 1").read().split("\n")[0] + " ms",
-        )
+        try:
+            embed.add_field(
+                name="Website Response",
+                value=os.popen("ping hyenabot.xyz -c 1").read().split("\n")[1] + " ms",
+            )
+        except:
+            pass
         embed.set_footer(
             text=self.hyena.tools.get_stupid_fact(), icon_url=ctx.guild.icon.url
         )

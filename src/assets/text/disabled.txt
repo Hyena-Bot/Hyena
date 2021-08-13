@@ -1,0 +1,12 @@
+
+Disabled Commands:
+8ball
+
+Blacklisted Channels:
+None
+
+Blacklisted Users:
+None
+
+Message toggle:
+Disabled
