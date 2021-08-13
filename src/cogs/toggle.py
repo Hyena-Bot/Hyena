@@ -9,6 +9,10 @@ class Toggle(commands.Cog):
         self.hyena = hyena
         self.colors = hyena.colors
         self.db = hyena.toggle_db
+    
+    @property
+    def catefory(self):
+        return ["Mod", "Utils"]
 
     @commands.command(name="disable")
     @commands.has_permissions(manage_guild=True)
