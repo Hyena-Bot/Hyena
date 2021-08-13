@@ -166,7 +166,8 @@ NOTE: All of the data mentioned above will be deleted from our database when you
     async def accept(self, ctx, *, reason="None."):
         if ctx.message.reference is None:
             return await ctx.send(
-                "You need to reply to the suggestion you wanna accept."            )
+                "You need to reply to the suggestion you wanna accept."
+            )
         message_id = ctx.message.reference.message_id
         message = await ctx.channel.fetch_message(message_id)
         if message.author.id != self.hyena.user.id:
