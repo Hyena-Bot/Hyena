@@ -207,6 +207,156 @@ class ImageFun(commands.Cog):
 
                 await ctx.send(file=file, embed=embed)
 
+    @commands.command()
+    @commands.cooldown(1, 3, BucketType.user)
+    async def tweet(
+        self,
+        ctx,
+        member: discord.Member = None,
+        display_name=None,
+        *,
+        message="Next time provide a message nub.",
+    ):
+        if not member:
+            return await ctx.send("Please provide a member.")
+        if not display_name:
+            return await ctx.send("Please provide a display name for your tweet.")
+
+        async with aiohttp.ClientSession() as tweetSession:
+            async with tweetSession.get(
+                f"https://some-random-api.ml/canvas/tweet?avatar={member.avatar.url}&displayname={display_name}&username={member.name}&comment={message}"
+            ) as tweet:  # get users avatar as png with 1024 size
+                tweetData = io.BytesIO(await tweet.read())
+                file = discord.File(tweetData, "tweeted.png")
+
+                embed = discord.Embed(color=random.choice(self.hyena.colors))
+                embed.set_author(
+                    name=f"{member.name} Just tweeted", icon_url=member.avatar.url
+                )
+                embed.set_image(url="attachment://tweeted.png")
+
+                await tweetSession.close()
+
+                await ctx.send(file=file, embed=embed)
+
+    @commands.command(aliases=["blurple", "new-blurple", "new_blurple"])
+    @commands.cooldown(1, 3, BucketType.user)
+    async def blurpify(self, ctx, member: discord.Member = None):
+        if not member:
+            member = ctx.author
+
+        async with aiohttp.ClientSession() as blurpleSession:
+            async with blurpleSession.get(
+                f"https://some-random-api.ml/canvas/blurple2?avatar={member.avatar.url}"
+            ) as blurpImg:  # get users avatar as png with 1024 size
+                blurpleData = io.BytesIO(await blurpImg.read())
+                file = discord.File(blurpleData, "blurpify.png")
+
+                embed = discord.Embed(color=random.choice(self.hyena.colors))
+                embed.set_author(
+                    name=f"{member.name} chose the new blurple color",
+                    icon_url=member.avatar.url,
+                )
+                embed.set_image(url="attachment://blurpify.png")
+
+                await blurpleSession.close()
+
+                await ctx.send(file=file, embed=embed)
+
+    @commands.command(aliases=["old-blurple", "old_blurple"])
+    @commands.cooldown(1, 3, BucketType.user)
+    async def old_blurpify(self, ctx, member: discord.Member = None):
+        if not member:
+            member = ctx.author
+
+        async with aiohttp.ClientSession() as blurpleSession:
+            async with blurpleSession.get(
+                f"https://some-random-api.ml/canvas/blurple?avatar={member.avatar.url}"
+            ) as blurpImg:  # get users avatar as png with 1024 size
+                blurpleData = io.BytesIO(await blurpImg.read())
+                file = discord.File(blurpleData, "blurpify.png")
+
+                embed = discord.Embed(color=random.choice(self.hyena.colors))
+                embed.set_author(
+                    name=f"{member.name} chose a classic blurple color",
+                    icon_url=member.avatar.url,
+                )
+                embed.set_image(url="attachment://blurpify.png")
+
+                await blurpleSession.close()
+
+                await ctx.send(file=file, embed=embed)
+
+    @commands.command(aliases=["redify", "blood"])
+    @commands.cooldown(1, 3, BucketType.user)
+    async def red(self, ctx, member: discord.Member = None):
+        if not member:
+            member = ctx.author
+
+        async with aiohttp.ClientSession() as bloodySession:
+            async with bloodySession.get(
+                f"https://some-random-api.ml/canvas/red?avatar={member.avatar.url}"
+            ) as bloodImg:  # get users avatar as png with 1024 size
+                bloodyData = io.BytesIO(await bloodImg.read())
+                file = discord.File(bloodyData, "red.png")
+
+                embed = discord.Embed(color=random.choice(self.hyena.colors))
+                embed.set_author(
+                    name=f"{member.name} became bloody ?? wtf",
+                    icon_url=member.avatar.url,
+                )
+                embed.set_image(url="attachment://red.png")
+
+                await bloodySession.close()
+
+                await ctx.send(file=file, embed=embed)
+
+    @commands.command(aliases=["bloo", "bluify"])
+    @commands.cooldown(1, 3, BucketType.user)
+    async def blue(self, ctx, member: discord.Member = None):
+        if not member:
+            member = ctx.author
+
+        async with aiohttp.ClientSession() as blooSession:
+            async with blooSession.get(
+                f"https://some-random-api.ml/canvas/blue?avatar={member.avatar.url}"
+            ) as blooImg:  # get users avatar as png with 1024 size
+                blooData = io.BytesIO(await blooImg.read())
+                file = discord.File(blooData, "blue.png")
+
+                embed = discord.Embed(color=random.choice(self.hyena.colors))
+                embed.set_author(
+                    name=f"{member.name}, how blue.", icon_url=member.avatar.url
+                )
+                embed.set_image(url="attachment://blue.png")
+
+                await blooSession.close()
+
+                await ctx.send(file=file, embed=embed)
+
+    @commands.command(aliases=["greenify", "goo"])
+    @commands.cooldown(1, 3, BucketType.user)
+    async def green(self, ctx, member: discord.Member = None):
+        if not member:
+            member = ctx.author
+
+        async with aiohttp.ClientSession() as greenSession:
+            async with greenSession.get(
+                f"https://some-random-api.ml/canvas/green?avatar={member.avatar.url}"
+            ) as gooImg:  # get users avatar as png with 1024 size
+                greenData = io.BytesIO(await gooImg.read())
+                file = discord.File(greenData, "green.png")
+
+                embed = discord.Embed(color=random.choice(self.hyena.colors))
+                embed.set_author(
+                    name=f"{member.name}, how green.", icon_url=member.avatar.url
+                )
+                embed.set_image(url="attachment://green.png")
+
+                await greenSession.close()
+
+                await ctx.send(file=file, embed=embed)
+
 
 # ---------------------------- End of Image Fun ---------------------------------
 
