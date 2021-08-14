@@ -28,3 +28,11 @@ class CommandLogs:
                 await channel.send(embed=embed)
             except:
                 pass
+
+    async def send_2(self, guild, embed):
+        channel = await GuildConfig(guild, self.hyena).get_channel()
+        if channel:
+            try:
+                await channel.send(embed=embed)
+            except:
+                pass

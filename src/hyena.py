@@ -294,6 +294,8 @@ After 5 seconds hyena will default to normal boot
             ): "welcome-goodbye",
             ("todo", "todos", "to-do"): "todo",
             ("logging", "logs", "log"): "logging",
+            ("giveaway", "giveaways", "gws", "gw"): "giveaways",
+            ("mute-system", "mute", "mutes"): "mute-system",
         }
 
         for alias, cog in aliases.items():

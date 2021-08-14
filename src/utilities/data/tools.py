@@ -74,6 +74,7 @@ async def create_invite(ctx):
 
 
 def convert_time(time):
+    time = str(time)
     pos = ["s", "m", "h", "d"]
 
     time_dict = {"s": 1, "m": 60, "h": 3600, "d": 3600 * 24}

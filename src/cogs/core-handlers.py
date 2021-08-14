@@ -16,7 +16,9 @@ class Handlers(commands.Cog):
     def __init__(self, hyena):
         self.hyena = hyena
         self.update_stats.start()
+        self.unmute_temp_mutes.start()
         self.hyena.add_check(self.toggle)
+        self.logging = self.hyena.action_logs_pkg.CommandLogs(self.hyena)
 
     @property
     def category(self):
@@ -55,6 +57,71 @@ class Handlers(commands.Cog):
         else:
             del data
             return True
+
+    async def get_mute_role(self, guild):
+        res = await self.hyena.main_db2.fetch(
+            "SELECT * FROM muterole WHERE guild_id = $1", guild.id
+        )
+        if not res:
+            return None
+        if res:
+            role = guild.get_role(res[0]["role_id"])
+            return role
+
+    @tasks.loop(seconds=5)
+    async def unmute_temp_mutes(self):
+        delete_query = "DELETE FROM tempmute WHERE member_id = $1 AND guild_id = $2"
+        await self.hyena.wait_until_ready()
+
+        res = await self.hyena.main_db2.fetch("SELECT * FROM tempmute")
+        for result in res:
+            if int(result["time_to_unmute"]) <= __import__("time").time():
+                guild = await self.hyena.fetch_guild(result["guild_id"])
+
+                try:
+                    member = await guild.fetch_member(int(result["member_id"]))
+                except discord.errors.NotFound:
+                    await self.hyena.main_db2.execute(
+                        delete_query, result["member_id"], guild.id
+                    )
+                    print("continuing 1")
+                    continue
+                muterole = await self.get_mute_role(guild)
+                if not muterole:
+                    await self.hyena.main_db2.execute(
+                        delete_query, result["member_id"], guild.id
+                    )
+                    print("continuing 2")
+                    continue
+                try:
+                    await member.remove_roles(muterole)
+                except:
+                    await self.hyena.main_db2.execute(
+                        delete_query, result["member_id"], guild.id
+                    )
+                    print("continuing 3")
+                    continue
+                else:
+                    await self.hyena.main_db2.execute(
+                        delete_query, result["member_id"], guild.id
+                    )
+                    em = discord.Embed(colour=random.choice(self.hyena.colors))
+                    em.set_author(name=f"UNMUTE | {member}", icon_url=member.avatar.url)
+                    em.add_field(name="User", value=member)
+                    em.add_field(name="Moderator", value=self.hyena.user)
+                    em.add_field(name="Reason", value="Auto Unmute")
+                    em.set_footer(
+                        text=f"Moderator: {self.hyena.user}",
+                        icon_url=self.hyena.user.avatar.url,
+                    )
+
+                    await self.logging.send_2(guild, em)
+                    try:
+                        await member.send(
+                            f"**{guild.name}:** You have been 🔊 unmuted [Temp Mute Expiration]"
+                        )
+                    except:
+                        pass
 
     @commands.Cog.listener()
     async def on_message(self, message):
