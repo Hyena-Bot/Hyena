@@ -1,12 +1,13 @@
 import ast
 import asyncio
 import datetime
+import math
 import os
 import random
 import sqlite3
 import sys
 import traceback
-import math
+
 import asyncpg
 import discord
 import inputimeout
@@ -63,7 +64,9 @@ class Hyena(commands.AutoShardedBot):
         console = self.get_channel(794467788332728365)
         embeds = self.tools.error_to_embed()
         context_embed = discord.Embed(
-            title="Context", description=f"**Event**: {event_method}", color=discord.Color.red()
+            title="Context",
+            description=f"**Event**: {event_method}",
+            color=discord.Color.red(),
         )
         await console.send(embeds=[*embeds, context_embed])
 
