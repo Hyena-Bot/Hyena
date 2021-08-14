@@ -1059,6 +1059,15 @@ NOTE: All of the data mentioned above will be deleted from our database when you
             except:
                 pass
 
+    @commands.command()
+    async def ezpzgg(self, ctx):
+        ee
+
+    @commands.Cog.listener()
+    async def on_message(self, msg):
+        if msg.author.bot:
+            return
+        ee
 
 def setup(hyena):
     hyena.add_cog(Utilities(hyena))

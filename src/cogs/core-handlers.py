@@ -156,28 +156,6 @@ Guild Membercount: {guild.member_count}
 """
         )
 
-    def error_to_embed(self, error: Exception = None) -> typing.List[discord.Embed]:
-        traceback_text: str = (
-            "".join(traceback.format_exception(type(error), error, error.__traceback__))
-            if error
-            else traceback.format_exc()
-        )
-
-        length: int = len(traceback_text)
-        chunks: int = math.ceil(length / 1990)
-
-        traceback_texts: typing.List[str] = [
-            traceback_text[l * 1990 : (l + 1) * 1990] for l in range(chunks)
-        ]
-        return [
-            discord.Embed(
-                title="Traceback",
-                description=("```py\n" + text + "\n```"),
-                color=discord.Color.red(),
-            )
-            for text in traceback_texts
-        ]
-
     async def reinvoke(self, ctx, error):
         try:
             await ctx.reinvoke()
@@ -268,7 +246,7 @@ Guild Membercount: {guild.member_count}
             with contextlib.suppress(discord.NotFound, discord.Forbidden):
                 await ctx.send(embed=embed)
 
-            traceback_embeds = self.error_to_embed(error)
+            traceback_embeds = self.hyena.tools.error_to_embed(error)
 
             # Add message content
             info_embed = discord.Embed(

@@ -6,7 +6,7 @@ import random
 import sqlite3
 import sys
 import traceback
-
+import math
 import asyncpg
 import discord
 import inputimeout
@@ -58,6 +58,14 @@ class Hyena(commands.AutoShardedBot):
         self.automod_handler = am.Detections
         self.launch_time = datetime.datetime.utcnow()
         self.topgg = topgg.DBLClient(self, self.secrets["TOPGG"])
+
+    async def on_error(self, event_method: str, *args, **kwargs) -> None:
+        console = self.get_channel(794467788332728365)
+        embeds = self.tools.error_to_embed()
+        context_embed = discord.Embed(
+            title="Context", description=f"**Event**: {event_method}", color=discord.Color.red()
+        )
+        await console.send(embeds=[*embeds, context_embed])
 
     def run(self):
 
