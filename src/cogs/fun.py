@@ -17,7 +17,7 @@ class ImageFun(commands.Cog):
         self.hyena.colors = colors
 
     @property
-    def data(self):
+    def category(self):
         return ["Fun"]
 
     # commands:

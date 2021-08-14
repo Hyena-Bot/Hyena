@@ -1059,6 +1059,7 @@ NOTE: All of the data mentioned above will be deleted from our database when you
             except:
                 pass
 
+
 def setup(hyena):
     hyena.add_cog(Utilities(hyena))
     hyena.add_cog(AutoRoles(hyena))
