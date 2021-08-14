@@ -11,10 +11,14 @@ class Toggle(commands.Cog):
         self.db = hyena.toggle_db
 
     @property
-    def catefory(self):
+    def category(self):
         return ["Mod", "Utils"]
 
-    @commands.command(name="disable")
+    @commands.command(
+        name="disable",
+        description="Disable a command for the server, or blacklist a server/user.",
+        usage="[p]disable <command | user | channel>",
+    )
     @commands.has_permissions(manage_guild=True)
     async def disable(self, ctx, command_user_channel):
         try:
@@ -54,6 +58,12 @@ class Toggle(commands.Cog):
                 return await ctx.send(
                     "You really think I will allow you to blacklist yourself?"
                 )
+
+            if command_user_channel.id in self.hyena.owner_ids:
+                return await ctx.send("NERD! You cannot blacklist bot owners.")
+
+            if command_user_channel.guild_permissions.manage_guild:
+                return await ctx.send("You cannot blacklist moderators.")
             if data is None:
                 sql = "INSERT INTO users (guild_id, users) VALUES ($1, $2)"
                 val = (ctx.guild.id, [command_user_channel.id])
@@ -97,7 +107,11 @@ class Toggle(commands.Cog):
             print("Something is really, really, realllyyyyyyyyyyyyy broken")
             return await ctx.send("Could not find any such channel/user/command.")
 
-    @commands.command(name="enable")
+    @commands.command(
+        name="enable",
+        description="Enable a blacklisted command for the server, or whitelist a server/user.",
+        usage="[p]enable <command | user | channel>",
+    )
     @commands.has_permissions(manage_guild=True)
     async def enbale(self, ctx, command_user_channel):
         try:
@@ -171,7 +185,12 @@ class Toggle(commands.Cog):
             print("Something is really, really, realllyyyyyyyyyyyyy broken")
             return await ctx.send("Could not find any such channel/user/command.")
 
-    @commands.group(name="toggle")
+    @commands.group(
+        name="toggle",
+        aliases=["toggle-conf"],
+        description="Change the settings for the toggle command.",
+        usage="[p]toggle [subcommand]",
+    )
     async def toggle(self, ctx):
         if ctx.invoked_subcommand is None:
             embed = discord.Embed(
