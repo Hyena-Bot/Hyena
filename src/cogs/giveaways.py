@@ -279,7 +279,7 @@ NOTE: All of the data mentioned above will be deleted from our database when the
             m = await self.hyena.get_channel(int(payload.channel_id)).fetch_message(
                 int(payload.message_id)
             )
-        except discord.errors.NotFound:
+        except (discord.errors.NotFound, discord.errors.Forbidden):
             return
         guild = self.hyena.get_guild(int(payload.guild_id))
         if not guild:
