@@ -212,7 +212,9 @@ class Moderation(commands.Cog):
     async def purge(self, ctx, amount, member: discord.Member = None):
         await ctx.message.delete()
         hist = await ctx.channel.history(limit=2).flatten()
-        created_at = (datetime.datetime.now(datetime.timezone.utc) - hist[1].created_at).days
+        created_at = (
+            datetime.datetime.now(datetime.timezone.utc) - hist[1].created_at
+        ).days
         back = datetime.datetime.utcnow() - datetime.timedelta(days=14)
 
         if int(created_at) >= 14:

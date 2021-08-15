@@ -44,7 +44,7 @@ class Invites(commands.Cog):
         try:
             m = await self.tracker.fetch_inviter(member)
         except discord.errors.Forbidden:
-            return 
+            return
         if m is None:
             return
         cur = self.second_db.cursor()
