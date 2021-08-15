@@ -41,7 +41,10 @@ class Invites(commands.Cog):
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
-        m = await self.tracker.fetch_inviter(member)
+        try:
+            m = await self.tracker.fetch_inviter(member)
+        except discord.errors.Forbidden:
+            return 
         if m is None:
             return
         cur = self.second_db.cursor()

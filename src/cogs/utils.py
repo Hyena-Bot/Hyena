@@ -255,6 +255,8 @@ Bot Roles: {len([r for r in ctx.guild.roles if r.is_bot_managed()])}
         embed.description = """
 Wave Bot by Who is Jeff#4788 - [Invite Now](https://discord.com/oauth2/authorize?client_id=819567695702917150&scope=bot&permissions=289856)
 Connect Bot by UnsoughtConch#9225 - [Invite Now](https://bit.ly/3iUa63Q)
+Violet Bot by a boi here ;o#4779 - [Invite Now](https://discord.com/oauth2/authorize?client_id=811260577178976267&permissions=1914006726&scope=bot)
+Nebula Bot by I N K Y#0001 - [Invite Now](https://dsc.gg/nebulainvite)
 
 **Want your server/bot here? Join our [Support Server](https://discord.gg/cHYWdK5GNt) <a:kidvibe:852396946835767296>**
 """
@@ -583,9 +585,9 @@ Python Version: {os.popen("python3 --version").read()}
         )
         embed.set_author(name="Hyena Invites", icon_url=self.hyena.user.avatar.url)
         embed.description = f"""
-**Bot invite:** [click here!](https://invite.hyenabot.xyz/)** 
+**Bot invite:** [click here!](https://invite.hyenabot.xyz/)
 **TOP.GG:** [click here!](https://top.gg/bot/790892810243932160/)
-**Upvote on TOP.GG:** [click here!](https://top.gg/bot/790892810243932160/vote)                                                                                   **
+**Upvote on TOP.GG:** [click here!](https://top.gg/bot/790892810243932160/vote)
 **Support server:** [click here!](https://support.hyenabot.xyz/)
 **Website:** [click here!](https://hyenabot.xyz/)
 **API:** [click here!](https://api.hyenabot.xyz/)

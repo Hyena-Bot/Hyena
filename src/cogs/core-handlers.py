@@ -194,7 +194,7 @@ Guild Invite: {invite}
                 description=f"Heya! 👋🏻 Thanks For adding me to your server! The default prefix is `-`, hope you enjoy using me!",
                 color=value,
             )
-            join_embed.set_thumbnail(url=self.hyena.user.avatar_url)
+            join_embed.set_thumbnail(url=self.hyena.user.avatar.url)
             join_embed.add_field(
                 name="Useful Links",
                 value=f"[Invite Me](https://discord.com/api/oauth2/authorize?client_id=790892810243932160&permissions=8&scope=bot) | [Support Server](https://discord.gg/cHYWdK5GNt)",
