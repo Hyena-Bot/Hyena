@@ -436,6 +436,13 @@ class HelpCommand(comms.Cog):
                     page = action.split("-")[1]
                     embed = helps.get(page)
                     cur_page = int(page)
+                    if cur_page == 7:
+                        new_view.children[4].disabled = True
+                        new_view.children[3].disabled = True
+
+                    if cur_page == 1:
+                        new_view.children[0].disabled = True
+                        new_view.children[1].disabled = True
                     await message.edit(embed=embed, view=new_view)
                     view = new_view
 
