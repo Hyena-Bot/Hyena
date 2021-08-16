@@ -225,11 +225,12 @@ class Moderation(commands.Cog):
         if amount == "all" or amount == "nuke":
             amount = 1000
 
-        if not amount.isnumeric():
+        try:
+            amount = int(amount)
+        except ValueError:
             return await ctx.send(
                 "Only `Integers (Numbers), all, nuke` will be accepted"
             )
-        amount = int(amount)
 
         if amount > 100000:
             return await ctx.send(

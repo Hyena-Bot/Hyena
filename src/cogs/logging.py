@@ -506,7 +506,7 @@ NOTE: All of the data mentioned above will be deleted from our database when you
         embed.description = "First 256 messages attached below."
         embed.set_footer(text="Hyena Logging", icon_url=self.hyena.user.avatar.url)
 
-        await webhook.send(embed=embed, file=discord.File("./assets/purged.txt"))
+        await webhook.send(embed=embed, file=discord.File("./assets/text/purged.txt"))
 
 
 def setup(hyena):
