@@ -41,6 +41,7 @@ class Moderation(commands.Cog):
                 ctx.author.top_role > member.top_role
                 or ctx.guild.owner == ctx.author
                 and not member == ctx.author
+                and member.top_role < ctx.guild.me.top_role
             ):
                 try:
                     await member.send(
@@ -81,6 +82,10 @@ class Moderation(commands.Cog):
             else:
                 if member == ctx.author:
                     return await ctx.send("You can't ban yourself. 🤦🏻‍")
+                elif member.top_role > ctx.guild.me.top_role:
+                    return await ctx.send(
+                        f"Hmmm, I do not have permission to ban {member}."
+                    )
                 else:
                     return await ctx.send(
                         "Error, this person has a higher or equal role to you"
@@ -102,6 +107,7 @@ class Moderation(commands.Cog):
                 ctx.author.top_role > member.top_role
                 or ctx.guild.owner == ctx.author
                 and not member == ctx.author
+                and member.top_role < ctx.guild.me.top_role
             ):
                 try:
                     await member.send(
@@ -134,6 +140,10 @@ class Moderation(commands.Cog):
             else:
                 if member == ctx.author:
                     return await ctx.send("You can't kick yourself. 🤦🏻‍")
+                elif member.top_role > ctx.guild.me.top_role:
+                    return await ctx.send(
+                        f"Hmmm, I do not have permission to kick {member}."
+                    )
                 else:
                     return await ctx.send(
                         "Error, this person has a higher or equal role to you"
