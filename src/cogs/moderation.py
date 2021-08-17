@@ -67,7 +67,6 @@ class Moderation(commands.Cog):
 
                 await self.logging.send(ctx, embed)
                 await moderation_actions.log(
-                    self.db,
                     self.hyena,
                     {
                         "user_id": member.id,
@@ -125,7 +124,6 @@ class Moderation(commands.Cog):
 
                 await self.logging.send(ctx, embed)
                 await moderation_actions.log(
-                    self.db,
                     self.hyena,
                     {
                         "user_id": member.id,
@@ -480,7 +478,6 @@ class Moderation(commands.Cog):
 
         await self.logging.send(ctx, embed)
         await moderation_actions.log(
-            self.db,
             self.hyena,
             {
                 "user_id": member.id,

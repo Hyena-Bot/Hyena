@@ -63,7 +63,6 @@ class Warns(commands.Cog):
         await self.db.execute(sql, *val)
         await ctx.send(f"Successfully warned {member} for {reason}.")
         await moderation_actions.log(
-            self.db,
             self.hyena,
             {
                 "user_id": member.id,

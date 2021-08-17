@@ -296,6 +296,7 @@ After 5 seconds hyena will default to normal boot
             ("logging", "logs", "log"): "logging",
             ("giveaway", "giveaways", "gws", "gw"): "giveaways",
             ("mute-system", "mute", "mutes"): "mute-system",
+            ("verify", "verification", "captcha", "server-captcha"): "verify",
         }
 
         for alias, cog in aliases.items():

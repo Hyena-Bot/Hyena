@@ -320,7 +320,6 @@ NOTE: All of the data mentioned above will be deleted from our database when you
             )
 
             await moderation_actions.log(
-                self.db,
                 self.hyena,
                 {
                     "user_id": member.id,
@@ -381,7 +380,6 @@ NOTE: All of the data mentioned above will be deleted from our database when you
 
         await self.logging.send(ctx, em)
         await moderation_actions.log(
-            self.db,
             self.hyena,
             {
                 "user_id": member.id,

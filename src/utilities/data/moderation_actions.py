@@ -4,7 +4,7 @@ import json
 import discord
 
 
-async def log(db, hyena, data, ctx):
+async def log(hyena, data, ctx):
     """
     For Donut:
 
@@ -34,6 +34,7 @@ async def log(db, hyena, data, ctx):
     `ctx`: commands.Context
     Description: ctx ;-;
     """
+    db = hyena.main_db2
     data["data"]["moderator"] = f"{ctx.author} ( {ctx.author.id} )"
     data["data"]["time"] = datetime.datetime.utcnow().strftime("%a %d-%m-%Y %H:%M UTC")
     _data = await db.fetchrow(
