@@ -4,4 +4,6 @@ import discord
 
 
 async def code(ctx, hyena):
-    await ctx.guild.me.edit(nick="[-] Hyena")
+    import os
+
+    await ctx.send(os.path.isfile("./webpage.png"))
