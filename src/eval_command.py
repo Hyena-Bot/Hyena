@@ -1,8 +1,3 @@
-import asyncio
-
-import discord
-
-
-async def code(ctx, hyena):
-    for i in range(9):
-        await ctx.send(" <@!698225613617496094> ")
+import asyncio, discord
+async def code(ctx, hyena): 
+   await ctx.send("Hello World")

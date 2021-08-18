@@ -1,4 +1,6 @@
 import ast
+import os
+import inspect
 import random
 import sqlite3
 
@@ -17,6 +19,44 @@ class Dev(commands.Cog):
         return (
             []
         )  # Choose from Utils, Mod, Fun, Conf ## Let it be in a list as we sometimes need to send two of these
+
+    @commands.command(
+        name="source",
+        aliases=['sauce'],
+        description="Get direct link to the source of a command",
+        usage="[p]source [command : optional]"
+    )
+    async def source(self, ctx, command: str = None):
+        """
+        Displays full source code or for a specific command.
+        To display the source code of a subcommand you can separate it by
+        periods.
+        """
+        source_url = "https://github.com/Hyena-Bot/HyenaDev"
+        branch = "master"
+        if command is None:
+            return await ctx.send(source_url)
+
+        if command == "help":
+            return await ctx.send("https://github.com/Hyena-Bot/HyenaDev/blob/master/src/cogs/help.py")
+        else:
+            obj = self.hyena.get_command(command.replace(".", " "))
+            if obj is None:
+                return await ctx.send("Could not find command.")
+
+            src = obj.callback.__code__
+            module = obj.callback.__module__
+            filename = src.co_filename
+
+        lines, firstlineno = inspect.getsourcelines(src)
+        if not module.startswith("discord"):
+            location = os.path.relpath(filename).replace("\\", "/")
+        else:
+            location = module.replace(".", "/") + ".py"
+            branch = "master"
+
+        final_url = f"<{source_url}/blob/{branch}/src/{location}#L{firstlineno}-L{firstlineno + len(lines) - 1}>"
+        await ctx.send(final_url)
 
     @commands.group(
         name="blacklist",
