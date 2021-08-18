@@ -1,4 +1,4 @@
-import datetime
+import datetime, typing
 import io
 import os
 import random
@@ -53,7 +53,7 @@ class ImageFun(commands.Cog):
 
     # Triggered
 
-    @commands.command()
+    @commands.command(name="triggered", description="Someone is really triggered...", usage="[p]triggered [user]", aliases=['trigger'])
     @commands.cooldown(1, 3, BucketType.user)
     async def triggered(self, ctx, member: discord.Member = None):
         if not member:
@@ -78,7 +78,7 @@ class ImageFun(commands.Cog):
 
     # wasted
 
-    @commands.command()
+    @commands.command(name="wasted", aliases=['waste'], description="Waste someone", usage="[p]triggered [user]")
     @commands.cooldown(1, 3, BucketType.user)
     async def wasted(self, ctx, member: discord.Member = None):
         if not member:
@@ -103,7 +103,7 @@ class ImageFun(commands.Cog):
 
     # mission passed
 
-    @commands.command()
+    @commands.command(name="passed", aliases=['mission-passed', 'mission_passed'], description="Mission Successfully passed. Respect ++", usage="[p]passed [user]")
     @commands.cooldown(1, 3, BucketType.user)
     async def passed(self, ctx, member: discord.Member = None):
         if not member:
@@ -129,7 +129,7 @@ class ImageFun(commands.Cog):
 
     # jail
 
-    @commands.command()
+    @commands.command(name="jail", aliases=['jailed'], description="Send someone to jail.", usage="[p]jail [user]")
     @commands.cooldown(1, 3, BucketType.user)
     async def jail(self, ctx, member: discord.Member = None):
         if not member:
@@ -155,7 +155,7 @@ class ImageFun(commands.Cog):
 
     # comrade
 
-    @commands.command()
+    @commands.command(name="comrade", aliases=['ussr', 'communism' 'soviet'], description="Make someone join the soviet union.", usage="[p]comrade [user]")
     @commands.cooldown(1, 3, BucketType.user)
     async def comrade(self, ctx, member: discord.Member = None):
         if not member:
@@ -181,7 +181,7 @@ class ImageFun(commands.Cog):
 
     # pixelssssssssss
 
-    @commands.command()
+    @commands.command(name="pixelate", aliases=['pixelated', 'pixels'], description="Pixels, Gotta love em'", usage="[p]pixelate [user]")
     @commands.cooldown(1, 3, BucketType.user)
     async def pixelate(self, ctx, member: discord.Member = None):
         if not member:
@@ -207,12 +207,12 @@ class ImageFun(commands.Cog):
 
     # hmmmm
 
-    @commands.command()
+    @commands.command(name="comment", aliases=['yt-comment'], description="Comment something on youtube? Do i have to tell you this too?", usage="[p]comment [user] [comment]")
     @commands.cooldown(1, 3, BucketType.user)
     async def comment(
         self,
         ctx,
-        member: discord.Member = None,
+        member: typing.Optional[discord.Member] = None,
         *,
         comment="Next time provide a comment nub.",
     ):
@@ -236,18 +236,17 @@ class ImageFun(commands.Cog):
 
                 await ctx.send(file=file, embed=embed)
 
-    @commands.command()
+    @commands.command(name="tweet", aliases=['twitter'], description="Tweet something? Do i have to tell you this too?", usage="[p]tweet [user] [display name] [comment]")
     @commands.cooldown(1, 3, BucketType.user)
     async def tweet(
         self,
         ctx,
-        member: discord.Member = None,
+        member: typing.Optional[discord.Member] = None,
         display_name=None,
         *,
         message="Next time provide a message nub.",
     ):
-        if not member:
-            return await ctx.send("Please provide a member.")
+        member = member or ctx.author
         if not display_name:
             return await ctx.send("Please provide a display name for your tweet.")
 
@@ -501,7 +500,7 @@ class OtherFun(commands.Cog):
 
     @commands.command(
         name="nothing",
-        aliases=["this_command_does_nothing"],
+        aliases=["this_command_does_nothing", "air"],
         usage="[p]nothing",
         description="Get air LOL",
     )
