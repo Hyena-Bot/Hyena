@@ -15,7 +15,7 @@ class Invites(commands.Cog):
         self.colours = colours
         self.tracker = DiscordUtils.InviteTracker(self.hyena)
         self.second_db = sqlite3.connect("./data/who_invited_whom.sqlite")
-    
+
     @commands.Cog.listener()
     async def on_member_join(self, member):
         try:
