@@ -15,30 +15,7 @@ class Invites(commands.Cog):
         self.colours = colours
         self.tracker = DiscordUtils.InviteTracker(self.hyena)
         self.second_db = sqlite3.connect("./data/who_invited_whom.sqlite")
-
-    @commands.Cog.listener(name="on_ready")
-    async def cache_invites(self):
-        await asyncio.sleep(30)
-        print("Caching invites.")
-        await self.tracker.cache_invites()
-        print("Invites cached.")
-
-    @commands.Cog.listener()
-    async def on_invite_create(self, invite):
-        await self.tracker.update_invite_cache(invite)
-
-    @commands.Cog.listener()
-    async def on_invite_delete(self, invite):
-        await self.tracker.remove_invite_cache(invite)
-
-    @commands.Cog.listener()
-    async def on_guild_join(self, guild):
-        await self.tracker.update_guild_cache(guild)
-
-    @commands.Cog.listener()
-    async def on_guild_remove(self, guild):
-        await self.tracker.remove_guild_cache(guild)
-
+    
     @commands.Cog.listener()
     async def on_member_join(self, member):
         try:
@@ -141,9 +118,7 @@ class Invites(commands.Cog):
         usage="[p]add-invites <member> [invites=1]",
         description="Give someone invites.",
     )
-    @commands.check_any(
-        commands.has_permissions(manage_roles=True), commands.is_owner()
-    )
+    @commands.has_permissions(manage_roles=True)
     async def add_invites(self, ctx, member: discord.Member, invites="1"):
         try:
             invites = int(invites)
@@ -157,15 +132,11 @@ class Invites(commands.Cog):
         if invs is None:
             sql = "INSERT INTO invites(guild_id, user_id, invites) VALUES($1, $2, $3)"
             val = (ctx.guild.id, member.id, f"[0,0,{invites}]")
-            print("Inserting")
         else:
-            print("Updating")
             invs = invs[2]
             invs = json.loads(invs)
             invs[2] += invites
-            print(invs)
             invs = json.dumps(invs)
-            print(invs)
             sql = "UPDATE invites SET invites = $1 WHERE user_id = $2 AND guild_id = $3"
             val = (invs, member.id, ctx.guild.id)
         await self.db.execute(sql, *val)
@@ -183,9 +154,7 @@ class Invites(commands.Cog):
         usage="[p]remove-invites <member> [invites=1]",
         description="Remove some inmvites from someone.",
     )
-    @commands.check_any(
-        commands.has_permissions(manage_roles=True), commands.is_owner()
-    )
+    @commands.has_permissions(manage_roles=True)
     async def remove_invites(self, ctx, member: discord.Member, invites="1"):
         try:
             invites = int(invites)
@@ -197,17 +166,13 @@ class Invites(commands.Cog):
             ctx.guild.id,
         )
         if invs is None:
-            print("inserting")
             sql = "INSERT INTO invites(guild_id, user_id, invites) VALUES($1, $2, $3)"
             val = (ctx.guild.id, member.id, f"[0,0,-{invites}]")
         else:
-            print("Updating")
             invs = invs[2]
             invs = json.loads(invs)
             invs[2] -= invites
-            print(invs)
             invs = json.dumps(invs)
-            print(invs)
             sql = "UPDATE invites SET invites = $1 WHERE user_id = $2 AND guild_id = $3"
             val = (invs, member.id, ctx.guild.id)
         await self.db.execute(sql, *val)
