@@ -1,6 +1,6 @@
 import ast
-import os
 import inspect
+import os
 import random
 import sqlite3
 
@@ -22,9 +22,9 @@ class Dev(commands.Cog):
 
     @commands.command(
         name="source",
-        aliases=['sauce'],
+        aliases=["sauce"],
         description="Get direct link to the source of a command",
-        usage="[p]source [command : optional]"
+        usage="[p]source [command : optional]",
     )
     async def source(self, ctx, command: str = None):
         """
@@ -38,7 +38,9 @@ class Dev(commands.Cog):
             return await ctx.send(source_url)
 
         if command == "help":
-            return await ctx.send("https://github.com/Hyena-Bot/HyenaDev/blob/master/src/cogs/help.py")
+            return await ctx.send(
+                "https://github.com/Hyena-Bot/HyenaDev/blob/master/src/cogs/help.py"
+            )
         else:
             obj = self.hyena.get_command(command.replace(".", " "))
             if obj is None:
