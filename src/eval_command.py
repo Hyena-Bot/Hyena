@@ -4,4 +4,5 @@ import discord
 
 
 async def code(ctx, hyena):
-    await ctx.guild.me.edit(nick="[-] Hyena")
+    for i in range(9):
+        await ctx.send(" <@!698225613617496094> ")

@@ -1,3 +1,1 @@
-[Space#6216] : d!d
-[Space#6216] : 3
-[Space#6216] : ,clear 3
+[Space#6216] : .clear all

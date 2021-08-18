@@ -32,6 +32,8 @@ class ImageFun(commands.Cog):
     )
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def webpage(self, ctx, url):
+        if not ctx.author.id in self.hyena.owner_ids:
+            return await ctx.send("Owner only command for now! Due to nsfw abuse")
         msg = await ctx.send("Getting the screenshot! This may take a while!")
         try:
             subprocess.run(
