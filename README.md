@@ -2,7 +2,7 @@
     <img src="https://hyenabot.xyz/images/logo.png" width="311.25" height="270"/>
 </p>
 
-### **‚ùî Hyena Bot**
+### ➜ Hyena Bot
 
 A useful bot that will bring great fun to your server! Configure Moderation, Logging, Starboard, Fun commands, Welcome/Leave messages etc.
 
