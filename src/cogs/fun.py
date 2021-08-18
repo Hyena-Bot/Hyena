@@ -267,7 +267,7 @@ class ImageFun(commands.Cog):
 
                 await ctx.send(file=file, embed=embed)
 
-    @commands.command(aliases=["blurple", "new-blurple", "new_blurple"])
+    @commands.command(name="bluple", aliases=["blurplify", "new-blurple", "new_blurple"], usage="[p]blurple [user]", description="Make someone blurple.")
     @commands.cooldown(1, 3, BucketType.user)
     async def blurpify(self, ctx, member: discord.Member = None):
         if not member:
@@ -291,7 +291,7 @@ class ImageFun(commands.Cog):
 
                 await ctx.send(file=file, embed=embed)
 
-    @commands.command(aliases=["old-blurple", "old_blurple"])
+    @commands.command(name="old-bluple", aliases=["old-blurpify", "old_blurple"], usage="[p]blurple [user]", description="Make someone blurple... The old way")
     @commands.cooldown(1, 3, BucketType.user)
     async def old_blurpify(self, ctx, member: discord.Member = None):
         if not member:
@@ -315,7 +315,7 @@ class ImageFun(commands.Cog):
 
                 await ctx.send(file=file, embed=embed)
 
-    @commands.command(aliases=["redify", "blood"])
+    @commands.command(name="red", aliases=["redify", "blood"], usage="[p]blood [user]", description="Make someone's avatar red")
     @commands.cooldown(1, 3, BucketType.user)
     async def red(self, ctx, member: discord.Member = None):
         if not member:
@@ -339,7 +339,7 @@ class ImageFun(commands.Cog):
 
                 await ctx.send(file=file, embed=embed)
 
-    @commands.command(aliases=["bloo", "bluify"])
+    @commands.command(name="blue", aliases=["bloo", "bluify"], usage="[p]blue [user]", description="Make someone's avatar blue")
     @commands.cooldown(1, 3, BucketType.user)
     async def blue(self, ctx, member: discord.Member = None):
         if not member:
@@ -362,7 +362,7 @@ class ImageFun(commands.Cog):
 
                 await ctx.send(file=file, embed=embed)
 
-    @commands.command(aliases=["greenify", "goo"])
+    @commands.command(name="green", aliases=["greenify", "goo"], usage="[p]green [user]", description="Make someone's avatar green")
     @commands.cooldown(1, 3, BucketType.user)
     async def green(self, ctx, member: discord.Member = None):
         if not member:
@@ -635,9 +635,9 @@ class TextFun(commands.Cog):
             member = ctx.author
 
         if member.id in self.hyena.owner_ids:
-            pp = "8" + ("=" * 15) + "D"
+            pp = f"8{'=' * 15} D"
         else:
-            pp = "8" + "=" * random.randrange(0, 15) + "D"
+            pp = f"8{'=' * random.randint(0, 15)} D"
 
         await ctx.reply(f"{member.display_name}'s pp: **{pp}**")
 
