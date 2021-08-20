@@ -64,11 +64,11 @@ class Afk(commands.Cog):
             return
         for data_block in guild_data:
             if message.author.id in data_block:
-                if time.time() - data_block[2] < 5:
-                    await message.channel.send(
-                        f"{message.author.mention}, A little too quick there!",
-                        delete_after=3,
-                    )
+                if time.time() - data_block[2] < 10:
+                    # await message.channel.send(
+                    #     f"{message.author.mention}, A little too quick there!",
+                    #     delete_after=3,
+                    # )
                     return
                 guild_data.remove(data_block)
         self._afk[message.guild.id] = guild_data
