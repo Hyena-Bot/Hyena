@@ -519,7 +519,7 @@ class Moderation(commands.Cog):
                     "Uh oh! Something went wrong, seems like the bot doesn't have the permissions"
                 )
 
-        if ctx.author.guild_permissions.manage_nicknames:
+        if not ctx.author.guild_permissions.manage_nicknames:
             return await ctx.send(
                 "> <:NO:800323400449916939> You are missing the `manage_nicknames` permission(s)!"
             )

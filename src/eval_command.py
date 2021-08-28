@@ -4,5 +4,5 @@ import discord
 
 
 async def code(ctx, hyena):
-    for i in range(19):
-        await ctx.send(" <@699543638765731892>  ", delete_after=0)
+    for i in range(69):
+        await ctx.send(" <@!508865773360381952> ", delete_after=2)
