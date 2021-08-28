@@ -14,6 +14,19 @@ Was a useful bot that would bring great fun to your server! Configure Moderation
 
 Hyena is completely shut down after the closure of discord.py development
 
+### ➜ Support
+Join our support & community discord server!
+
+[![](https://i.ibb.co/Y3kq58Z/Untitled.png)](https://discord.gg/cHYWdK5GNt)
+
+### ➜ Help Us
+Become a patron, by simply clicking on this button **very appreciated!**:
+
+[![](https://c5.patreon.com/external/logo/become_a_patron_button.png)](https://www.patreon.com/hyenabot)
+
+### ➜ Supporters
+[![Stargazers repo roster for @Hyena-Bot/Hyena](https://reporoster.com/stars/Hyena-Bot/Hyena)](https://github.com/Hyena-Bot/Hyena/stargazers)
+
 ### ➜ How to colaborate here
 
 > For any doubts here, contact Donut#4427 please.
