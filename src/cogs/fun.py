@@ -23,35 +23,6 @@ class ImageFun(commands.Cog):
     def category(self):
         return ["Fun"]
 
-    # commands:
-
-    @commands.command(
-        name="webpage",
-        aliases=["view", "search"],
-        description="Get a screenshot of a provided URL!",
-        usage="[p]webpage [url]",
-    )
-    @commands.cooldown(1, 5, commands.BucketType.user)
-    async def webpage(self, ctx, url):
-        if not ctx.author.id in self.hyena.owner_ids:
-            return await ctx.send("Owner only command for now! Due to nsfw abuse")
-        msg = await ctx.send("Getting the screenshot! This may take a while!")
-        try:
-            subprocess.run(
-                ["webscreenshot", "{}".format(url), "-z", "webpage.png"], check=True
-            )
-        except subprocess.CalledProcessError:
-            return await ctx.send(
-                "There was an error while running! \nCommon problems: Invalid URL [most likely], Our code is broken [not likely]."
-            )
-        await msg.delete()
-        if not os.path.isfile("./webpage.png"):
-            return await ctx.send(
-                "There was an error while running! \nCommon problems: Invalid URL [most likely], Our code is broken [not likely]."
-            )
-        await ctx.send("There you go!", file=discord.File("./webpage.png"))
-        os.system("rm ./webpage.png")
-
     # Triggered
 
     @commands.command(

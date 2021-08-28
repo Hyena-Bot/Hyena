@@ -1,22 +1,23 @@
 <p align="center">
-    <img src="https://hyenabot.xyz/images/logo.png" width="311.25" height="270"/>
+    <img src="https://i.ibb.co/8Ktgg0t/hyena-simple-golden.png" width="270" height="270"/>
 </p>
 
 ### ➜ Hyena Bot
 
-A useful bot that will bring great fun to your server! Configure Moderation, Logging, Starboard, Fun commands, Welcome/Leave messages etc.
+Was a useful bot that would bring great fun to your server! Configure Moderation, Logging, Starboard, Fun commands, Welcome/Leave messages etc.
 
 - All sorts of moderation commands, yeh pls ban 7 year old candy crush players.
 - God tier auto Moderation kekwnt.
 - Moderation command logs & regular server Mod Logs
 
-### ➜ Stats
+### ➜ Hyena News
 
-[![](https://top.gg/api/widget/790892810243932160.svg)](https://top.gg/bot/790892810243932160)
+Hyena is completely shut down after the closure of discord.py development
 
 ### ➜ How to colaborate here
 
 > For any doubts here, contact Donut#4427 please.
+> Collaborations are completely closed because the bot is dead ;(, you can still fix typos and stuff ig
 
 Step 1: Fork & Clone the repository
 
@@ -85,17 +86,3 @@ Step 6: Create a pull request
   ![Create a pull request](https://i.ibb.co/4WSCYnZ/Screenshot-2021-07-30-at-2-45-43-PM.png)
   <br/><br/>
 - Then Donut or Div will merge the pull request after reviewing
-
-### ➜ How to add your forked repository to the #github channel of Hyena's server
-
-- Step 1: Go to your repository
-- Step 2: Click on `Settings` -> `Webhooks` -> `Add webhook`
-- Step 3: Fill in `Payload URL with`
-
-```
-https://discord.com/api/webhooks/833230915357376532/A00W00rhhF40NzDVG8lpjTAWkFRygBUWWuGzhACkTDl49PuaOQrQhLSPSolQYkJOb38p/github
-```
-
-- Step 4: Change content type to `application/json`
-- Step 5: Change `Which events would you like to trigger this webhook?` to `Send me everything.`
-- Step 6: Let the rest be the same and click on `Add webhook`, and you're done
