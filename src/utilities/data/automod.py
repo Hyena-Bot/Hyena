@@ -89,7 +89,7 @@ class Detections:
 
     async def api_nsfw_detector(self, url):
         async with aiohttp.ClientSession() as cs:
-            headers = {"Api-Key": "eb09ecb1-b9d0-43bc-af3d-8df58e4907d3"}
+            headers = {"Api-Key": "deepai.org-api-key"}
             data = {"image": url}
             async with cs.post(
                 "https://api.deepai.org/api/nsfw-detector", headers=headers, data=data
